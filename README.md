@@ -25,7 +25,7 @@ Medical appointment management platform built with microservices architecture.
 - Docker and Docker Compose
 - Ruby 3.2+
 - Node.js 20+
-- PostgreSQL 15+
+- PostgreSQL 18.1
 - Redis 7+
 - RabbitMQ 3+
 
@@ -70,7 +70,7 @@ cd mobile && npx expo start
 
 ## Development
 
-See comprehensive development plan in `.claude/plans/` directory for detailed implementation guide.
+See comprehensive development plan in `plans/` directory for detailed implementation guide.
 
 ## Project Status
 
@@ -81,7 +81,7 @@ See comprehensive development plan in `.claude/plans/` directory for detailed im
 
 ### Backend
 - Ruby on Rails 8.1.1 (API mode)
-- PostgreSQL 15+
+- PostgreSQL 18.1
 - Redis 7+
 - RabbitMQ 3.x
 - Sidekiq
@@ -94,7 +94,7 @@ See comprehensive development plan in `.claude/plans/` directory for detailed im
 - TailwindCSS
 - TanStack Query
 - Zustand
-- React Router
+- React Router 7.9.6
 
 ### Mobile
 - React Native 0.73+
