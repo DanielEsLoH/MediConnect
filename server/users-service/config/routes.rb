@@ -11,10 +11,14 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     namespace :v1 do
-      # User routes will be added here
-      # resources :users
-      # resources :patients
-      # resources :medical_records
+      resources :users, only: [:index, :show, :create, :update, :destroy] do
+        collection do
+          get :search
+        end
+      end
+
+      resources :medical_records, only: [:index, :show, :create, :update, :destroy]
+      resources :allergies, only: [:index, :show, :create, :update, :destroy]
     end
   end
 end
