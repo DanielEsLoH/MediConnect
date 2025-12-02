@@ -18,6 +18,9 @@ gem "bcrypt", "~> 3.1.7"
 # API Gateway specific
 gem "rack-cors"
 gem "rack-attack"
+gem "faraday", "~> 2.9"
+gem "faraday-retry", "~> 2.2"
+gem "lograge", "~> 0.14"
 
 # Environment configuration
 gem "dotenv-rails", groups: [:development, :test]
