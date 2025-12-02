@@ -1,0 +1,412 @@
+version: '3.9'
+
+services:
+  # ============================================
+  # BACKEND MICROSERVICES
+  # ============================================
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile.dev.dev
+    container_name: mediconnect_api_gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./api-gateway:/rails
+      - api_gateway_gems:/usr/local/bundle
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_HOST=postgres_gateway
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=api_gateway_development
+      - REDIS_URL=redis://redis:6379/0
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - JWT_SECRET=development_jwt_secret_change_in_production
+      - PORT=3000
+    depends_on:
+      postgres_gateway:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/up || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - mediconnect_network
+
+  users-service:
+    build:
+      context: ./users-service
+      dockerfile: Dockerfile.dev
+    container_name: mediconnect_users_service
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./users-service:/rails
+      - users_service_gems:/usr/local/bundle
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_HOST=postgres_users
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=users_service_development
+      - REDIS_URL=redis://redis:6379/1
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - JWT_SECRET=development_jwt_secret_change_in_production
+      - PORT=3001
+    depends_on:
+      postgres_users:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3001/up || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - mediconnect_network
+
+  doctors-service:
+    build:
+      context: ./doctors-service
+      dockerfile: Dockerfile.dev
+    container_name: mediconnect_doctors_service
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./doctors-service:/rails
+      - doctors_service_gems:/usr/local/bundle
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_HOST=postgres_doctors
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=doctors_service_development
+      - REDIS_URL=redis://redis:6379/2
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - JWT_SECRET=development_jwt_secret_change_in_production
+      - PORT=3002
+    depends_on:
+      postgres_doctors:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3002/up || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - mediconnect_network
+
+  appointments-service:
+    build:
+      context: ./appointments-service
+      dockerfile: Dockerfile.dev
+    container_name: mediconnect_appointments_service
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./appointments-service:/rails
+      - appointments_service_gems:/usr/local/bundle
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_HOST=postgres_appointments
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=appointments_service_development
+      - REDIS_URL=redis://redis:6379/3
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - JWT_SECRET=development_jwt_secret_change_in_production
+      - PORT=3003
+    depends_on:
+      postgres_appointments:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3003/up || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - mediconnect_network
+
+  notifications-service:
+    build:
+      context: ./notifications-service
+      dockerfile: Dockerfile.dev
+    container_name: mediconnect_notifications_service
+    ports:
+      - "3004:3004"
+    volumes:
+      - ./notifications-service:/rails
+      - notifications_service_gems:/usr/local/bundle
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_HOST=postgres_notifications
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=notifications_service_development
+      - REDIS_URL=redis://redis:6379/4
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - JWT_SECRET=development_jwt_secret_change_in_production
+      - PORT=3004
+    depends_on:
+      postgres_notifications:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3004/up || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - mediconnect_network
+
+  payments-service:
+    build:
+      context: ./payments-service
+      dockerfile: Dockerfile.dev
+    container_name: mediconnect_payments_service
+    ports:
+      - "3005:3005"
+    volumes:
+      - ./payments-service:/rails
+      - payments_service_gems:/usr/local/bundle
+    environment:
+      - RAILS_ENV=development
+      - DATABASE_HOST=postgres_payments
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=payments_service_development
+      - REDIS_URL=redis://redis:6379/5
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - JWT_SECRET=development_jwt_secret_change_in_production
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-sk_test_development}
+      - PORT=3005
+    depends_on:
+      postgres_payments:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3005/up || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - mediconnect_network
+
+  # ============================================
+  # INFRASTRUCTURE SERVICES
+  # ============================================
+
+  # PostgreSQL for API Gateway
+  postgres_gateway:
+    image: postgres:18.1-alpine
+    container_name: mediconnect_postgres_gateway
+    environment:
+      POSTGRES_DB: api_gateway_development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_gateway_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mediconnect_network
+
+  # PostgreSQL for Users Service
+  postgres_users:
+    image: postgres:18.1-alpine
+    container_name: mediconnect_postgres_users
+    environment:
+      POSTGRES_DB: users_service_development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_users_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mediconnect_network
+
+  # PostgreSQL for Doctors Service
+  postgres_doctors:
+    image: postgres:18.1-alpine
+    container_name: mediconnect_postgres_doctors
+    environment:
+      POSTGRES_DB: doctors_service_development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_doctors_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mediconnect_network
+
+  # PostgreSQL for Appointments Service
+  postgres_appointments:
+    image: postgres:18.1-alpine
+    container_name: mediconnect_postgres_appointments
+    environment:
+      POSTGRES_DB: appointments_service_development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_appointments_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mediconnect_network
+
+  # PostgreSQL for Notifications Service
+  postgres_notifications:
+    image: postgres:18.1-alpine
+    container_name: mediconnect_notifications
+    environment:
+      POSTGRES_DB: notifications_service_development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres_notifications_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mediconnect_network
+
+  # PostgreSQL for Payments Service
+  postgres_payments:
+    image: postgres:18.1-alpine
+    container_name: mediconnect_postgres_payments
+    environment:
+      POSTGRES_DB: payments_service_development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5437:5432"
+    volumes:
+      - postgres_payments_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mediconnect_network
+
+  # Redis for caching and sessions
+  redis:
+    image: redis:7-alpine
+    container_name: mediconnect_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mediconnect_network
+
+  # RabbitMQ for message broker
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: mediconnect_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mediconnect_network
+
+volumes:
+  # Database volumes
+  postgres_gateway_data:
+  postgres_users_data:
+  postgres_doctors_data:
+  postgres_appointments_data:
+  postgres_notifications_data:
+  postgres_payments_data:
+  redis_data:
+  rabbitmq_data:
+  # Gem bundle caches (speeds up development)
+  api_gateway_gems:
+  users_service_gems:
+  doctors_service_gems:
+  appointments_service_gems:
+  notifications_service_gems:
+  payments_service_gems:
+
+networks:
+  mediconnect_network:
+    driver: bridge

@@ -1,0 +1,59 @@
+source "https://rubygems.org"
+
+ruby "3.4.7"
+
+# Core Rails
+gem "rails", "~> 8.1.1"
+gem "pg", "~> 1.1"
+gem "puma", ">= 5.0"
+
+# Caching and background jobs
+gem "redis", "~> 5.0"
+gem "sidekiq", "~> 7.0"
+
+# Authentication
+gem "jwt", "~> 2.7"
+gem "bcrypt", "~> 3.1.7"
+
+# API
+gem "rack-cors"
+gem "jbuilder"
+
+# Environment configuration
+gem "dotenv-rails", groups: [:development, :test]
+
+# Performance
+gem "bootsnap", require: false
+gem "oj" # Fast JSON parsing
+
+# Windows timezone data
+gem "tzinfo-data", platforms: %i[windows jruby]
+
+# Deployment
+gem "kamal", require: false
+gem "thruster", require: false
+
+group :development, :test do
+  gem "debug", platforms: %i[mri windows], require: "debug/prelude"
+  gem "bundler-audit", require: false
+  gem "brakeman", require: false
+
+  # Testing
+  gem "rspec-rails", "~> 7.0"
+  gem "factory_bot_rails", "~> 6.4"
+  gem "faker", "~> 3.2"
+
+  # Linting
+  gem "rubocop", require: false
+  gem "rubocop-rails", require: false
+  gem "rubocop-rspec", require: false
+  gem "rubocop-performance", require: false
+end
+
+group :test do
+  gem "shoulda-matchers", "~> 6.0"
+  gem "webmock", "~> 3.19"
+  gem "vcr", "~> 6.2"
+  gem "simplecov", require: false
+  gem "database_cleaner-active_record", "~> 2.1"
+end
