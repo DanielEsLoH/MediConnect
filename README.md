@@ -23,7 +23,7 @@ Medical appointment management platform built with microservices architecture.
 ### Prerequisites
 
 - Docker and Docker Compose
-- Ruby 3.2+
+- Ruby 3.4.7
 - Node.js 20+
 - PostgreSQL 18.1
 - Redis 7+

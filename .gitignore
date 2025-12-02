@@ -1,2 +1,32 @@
 /.claude
 MediConnect_Project_Plan_EN.pdf
+
+# Rails
+server/*/log/*
+server/*/tmp/*
+server/*/storage/*
+server/*/.bundle
+server/*/vendor/bundle
+server/*/config/master.key
+server/*/config/credentials/*.key
+server/*/db/*.sqlite3
+server/*/db/*.sqlite3-*
+server/*/node_modules/
+server/*/.byebug_history
+server/*/coverage/
+
+# Environment files
+server/*/.env
+server/*/.env.*
+!server/*/.env.example
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
