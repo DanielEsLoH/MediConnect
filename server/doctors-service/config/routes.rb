@@ -11,10 +11,19 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     namespace :v1 do
-      # Doctor routes will be added here
-      # resources :doctors
-      # resources :specialties
-      # resources :schedules
+      resources :doctors, only: [:index, :show] do
+        collection do
+          get :search
+          get :specialties
+        end
+        member do
+          get :availability
+          get :reviews
+        end
+      end
+
+      resources :reviews, only: [:create, :update, :destroy]
+      resources :specialties, only: [:index, :show]
     end
   end
 end
