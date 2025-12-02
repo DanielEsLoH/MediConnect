@@ -34,11 +34,25 @@ module ApiGateway
     # in config/environments, which are processed later.
     #
     # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+
+    # Autoload middleware directory
+    config.autoload_paths << Rails.root.join("app/middleware")
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # Add custom middleware for request tracing
+    config.middleware.use RequestTracer
+
+    # Use Rack::Attack for rate limiting
+    config.middleware.use Rack::Attack
+
+    # Configure generators
+    config.generators do |g|
+      g.test_framework :rspec
+      g.fixture_replacement :factory_bot, dir: "spec/factories"
+    end
   end
 end
