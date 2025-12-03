@@ -18,6 +18,9 @@ class HealthController < ApplicationController
     # Check Redis connectivity
     health_status[:checks][:redis] = check_redis
 
+    # Check RabbitMQ connectivity
+    health_status[:checks][:rabbitmq] = check_rabbitmq
+
     # Determine overall status
     all_healthy = health_status[:checks].values.all? { |check| check[:status] == "ok" }
     health_status[:status] = all_healthy ? "ok" : "degraded"
@@ -40,6 +43,15 @@ class HealthController < ApplicationController
     redis = Redis.new(url: redis_url)
     redis.ping
     { status: "ok", response_time_ms: measure_time { redis.ping } }
+  rescue StandardError => e
+    { status: "error", error: e.message }
+  end
+
+  def check_rabbitmq
+    connection = Bunny.new(ENV.fetch("RABBITMQ_URL", "amqp://guest:guest@localhost:5672"))
+    connection.start
+    connection.close
+    { status: "ok", message: "RabbitMQ connection successful" }
   rescue StandardError => e
     { status: "error", error: e.message }
   end

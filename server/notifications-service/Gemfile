@@ -11,6 +11,12 @@ gem "puma", ">= 5.0"
 gem "redis", "~> 5.0"
 gem "sidekiq", "~> 7.0"
 
+# Message broker
+gem "bunny", "~> 2.22"
+
+# Pagination
+gem "kaminari", "~> 1.2"
+
 # Authentication
 gem "jwt", "~> 2.7"
 
