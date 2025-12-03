@@ -33,12 +33,26 @@ module AppointmentsService
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    config.time_zone = "UTC"
+    config.active_record.default_timezone = :utc
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Background jobs
+    config.active_job.queue_adapter = :sidekiq
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # Generators
+    config.generators do |g|
+      g.orm :active_record, primary_key_type: :uuid
+      g.test_framework :rspec,
+                       fixtures: false,
+                       view_specs: false,
+                       helper_specs: false,
+                       routing_specs: false
+    end
   end
 end

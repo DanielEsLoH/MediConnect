@@ -11,9 +11,27 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     namespace :v1 do
-      # Appointment routes will be added here
-      # resources :appointments
-      # resources :time_slots
+      # Appointments
+      resources :appointments do
+        member do
+          post :confirm
+          post :cancel
+          post :complete
+        end
+
+        collection do
+          get :upcoming
+          get :history
+        end
+      end
+
+      # Video sessions
+      resources :video_sessions, only: [:create, :show] do
+        member do
+          post :start
+          post :end
+        end
+      end
     end
   end
 end
