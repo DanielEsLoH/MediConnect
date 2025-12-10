@@ -8,6 +8,21 @@ Rails.application.routes.draw do
   # Detailed health check with database and Redis status
   get "health", to: "health#show"
 
+  # Internal API routes for service-to-service communication
+  # These endpoints are called by other microservices
+  namespace :internal do
+    resources :users, only: [:show] do
+      collection do
+        post :batch
+        get :by_email
+      end
+      member do
+        get :contact_info
+        get :exists
+      end
+    end
+  end
+
   # API routes
   namespace :api do
     namespace :v1 do

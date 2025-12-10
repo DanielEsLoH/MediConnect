@@ -21,6 +21,10 @@ gem "stripe", "~> 10.0"
 gem "rack-cors"
 gem "jbuilder"
 
+# HTTP client for service-to-service communication
+gem "faraday", "~> 2.9"
+gem "faraday-retry", "~> 2.2"
+
 # Environment configuration
 gem "dotenv-rails", groups: [:development, :test]
 
