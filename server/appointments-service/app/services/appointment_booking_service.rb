@@ -45,27 +45,38 @@ class AppointmentBookingService
   end
 
   def validate_user_exists
-    url = "#{USERS_SERVICE_URL}/api/v1/users/#{@params[:user_id]}"
-    response = HttpClient.get(url)
+    # url = "#{USERS_SERVICE_URL}/api/v1/users/#{@params[:user_id]}"
+    # response = HttpClient.get(url)
+    response = HttpClient.get(:users, "/api/v1/users/#{@params[:user_id]}")
 
     if response.is_a?(Hash) && response[:error]
       @errors << "User not found"
+    elsif response.is_a?(HttpClient::Response) && !response.success?
+       @errors << "User not found (Status: #{response.status})"
     end
-  rescue HttpClient::ServiceUnavailableError, HttpClient::CircuitOpenError => e
+  rescue HttpClient::ServiceUnavailable, HttpClient::CircuitOpen => e
     @errors << "Unable to verify user: #{e.message}"
   end
 
   def validate_doctor_and_clinic
     # Validate doctor exists
-    doctor_url = "#{DOCTORS_SERVICE_URL}/api/v1/doctors/#{@params[:doctor_id]}"
-    doctor_response = HttpClient.get(doctor_url)
+    # doctor_url = "#{DOCTORS_SERVICE_URL}/api/v1/doctors/#{@params[:doctor_id]}"
+    # doctor_response = HttpClient.get(doctor_url)
+    doctor_response = HttpClient.get(:doctors, "/api/v1/doctors/#{@params[:doctor_id]}")
 
-    if doctor_response.is_a?(Hash) && doctor_response[:error]
+    if doctor_response.is_a?(HttpClient::Response)
+      if doctor_response.success?
+        @doctor_data = doctor_response.body["doctor"] || doctor_response.body
+      else
+        @errors << "Doctor not found"
+        return
+      end
+    elsif doctor_response.is_a?(Hash) && doctor_response[:error]
       @errors << "Doctor not found"
       return
+    else
+       @doctor_data = doctor_response
     end
-
-    @doctor_data = doctor_response
 
     # Validate clinic matches doctor's clinic
     if @doctor_data["clinic_id"] != @params[:clinic_id]

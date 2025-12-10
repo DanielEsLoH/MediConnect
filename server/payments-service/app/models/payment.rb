@@ -100,6 +100,7 @@ class Payment < ApplicationRecord
   # =============================================================================
   # CALLBACKS
   # =============================================================================
+  after_create :publish_payment_events
   after_update :publish_payment_events, if: :saved_change_to_status?
 
   # =============================================================================

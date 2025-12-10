@@ -121,7 +121,7 @@ module Authenticatable
   # @param token [String] The JWT token to decode
   # @return [Hash, nil] The decoded payload or nil if invalid
   def decode_token(token)
-    secret_key = ENV.fetch("JWT_SECRET_KEY", "development-secret-key")
+    secret_key = ENV.fetch("JWT_SECRET", "development-secret-key")
 
     decoded = JWT.decode(
       token,

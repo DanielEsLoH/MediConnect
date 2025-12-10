@@ -1,5 +1,6 @@
 /.claude
 MediConnect_Project_Plan_EN.pdf
+/scripts
 
 # Rails
 server/*/log/*

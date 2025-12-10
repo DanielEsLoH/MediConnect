@@ -140,7 +140,13 @@ module Api
 
       def appointment_params
         params.require(:appointment).permit(
+          :user_id,
           :doctor_id,
+          :clinic_id,
+          :appointment_date,
+          :start_time,
+          :end_time,
+          :consultation_type,
           :scheduled_at,
           :duration,
           :type,
