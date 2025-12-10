@@ -8,7 +8,7 @@ services:
   api-gateway:
     build:
       context: ./api-gateway
-      dockerfile: Dockerfile.dev.dev
+      dockerfile: Dockerfile.dev
     container_name: mediconnect_api_gateway
     ports:
       - "3000:3000"
