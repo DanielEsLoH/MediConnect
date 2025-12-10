@@ -50,10 +50,10 @@ class CreateAppointments < ActiveRecord::Migration[8.1]
     add_index :appointments, :clinic_id
     add_index :appointments, :status
     add_index :appointments, :appointment_date
-    add_index :appointments, [:user_id, :status]
-    add_index :appointments, [:doctor_id, :appointment_date]
-    add_index :appointments, [:doctor_id, :status]
-    add_index :appointments, [:appointment_date, :status]
+    add_index :appointments, [ :user_id, :status ]
+    add_index :appointments, [ :doctor_id, :appointment_date ]
+    add_index :appointments, [ :doctor_id, :status ]
+    add_index :appointments, [ :appointment_date, :status ]
     add_index :appointments, :request_id, unique: true
     add_index :appointments, :consultation_type
   end

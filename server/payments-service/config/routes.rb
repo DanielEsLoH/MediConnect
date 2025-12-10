@@ -21,7 +21,7 @@ Rails.application.routes.draw do
       # PAYMENTS
       # -------------------------------------------------------------------------
       # RESTful payment resources
-      resources :payments, only: [:index, :show] do
+      resources :payments, only: [ :index, :show ] do
         member do
           # POST /api/v1/payments/:id/refund
           # Process a refund for a completed payment (admin only)

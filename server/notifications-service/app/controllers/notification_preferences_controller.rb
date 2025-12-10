@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class NotificationPreferencesController < ApplicationController
-  before_action :set_notification_preference, only: [:show, :update]
+  before_action :set_notification_preference, only: [ :show, :update ]
 
   # GET /notification_preferences/:user_id
   def show

@@ -192,7 +192,7 @@ doctors_data = [
     years_of_experience: 20,
     consultation_fee: 175.00,
     bio: "Dr. Robert Smith is a board-certified cardiologist with over 20 years of experience in diagnosing and treating cardiovascular diseases. He specializes in preventive cardiology, heart failure management, and cardiac imaging. Dr. Smith has published extensively in peer-reviewed journals and is committed to patient-centered care.",
-    languages: ["English", "Spanish"],
+    languages: [ "English", "Spanish" ],
     accepting_new_patients: true,
     active: true
   },
@@ -207,7 +207,7 @@ doctors_data = [
     years_of_experience: 15,
     consultation_fee: 150.00,
     bio: "Dr. Jennifer Johnson is a fellowship-trained dermatologist specializing in medical and cosmetic dermatology. She has expertise in treating complex skin conditions including psoriasis, eczema, and skin cancer. Dr. Johnson is known for her compassionate approach and thorough patient education.",
-    languages: ["English", "French"],
+    languages: [ "English", "French" ],
     accepting_new_patients: true,
     active: true
   },
@@ -222,7 +222,7 @@ doctors_data = [
     years_of_experience: 17,
     consultation_fee: 125.00,
     bio: "Dr. Michael Williams is a dedicated pediatrician with 17 years of experience caring for children from infancy through adolescence. He focuses on developmental pediatrics and preventive care. Dr. Williams creates a friendly, welcoming environment to make children feel comfortable during their visits.",
-    languages: ["English", "Mandarin"],
+    languages: [ "English", "Mandarin" ],
     accepting_new_patients: true,
     active: true
   },
@@ -237,7 +237,7 @@ doctors_data = [
     years_of_experience: 12,
     consultation_fee: 200.00,
     bio: "Dr. Emily Brown is an orthopedic surgeon specializing in sports medicine and joint reconstruction. She has treated professional athletes and recreational sports enthusiasts alike. Dr. Brown emphasizes minimally invasive techniques and comprehensive rehabilitation programs.",
-    languages: ["English"],
+    languages: [ "English" ],
     accepting_new_patients: true,
     active: true
   },
@@ -252,7 +252,7 @@ doctors_data = [
     years_of_experience: 19,
     consultation_fee: 100.00,
     bio: "Dr. David Jones is a family medicine physician providing comprehensive primary care for patients of all ages. With 19 years of experience, he emphasizes preventive medicine, chronic disease management, and building long-term relationships with his patients and their families.",
-    languages: ["English", "Spanish", "Portuguese"],
+    languages: [ "English", "Spanish", "Portuguese" ],
     accepting_new_patients: true,
     active: true
   }

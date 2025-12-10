@@ -86,7 +86,7 @@ class EmailService
     last = @user_data&.dig(:last_name)
     return nil unless first || last
 
-    [first, last].compact.join(" ")
+    [ first, last ].compact.join(" ")
   end
 
   def build_email

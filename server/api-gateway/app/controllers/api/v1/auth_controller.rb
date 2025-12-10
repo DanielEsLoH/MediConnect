@@ -6,8 +6,8 @@ module Api
     # Handles login, logout, token refresh, and user info retrieval
     class AuthController < Api::BaseController
       # Skip authentication for login and refresh endpoints
-      skip_before_action :set_request_context, only: [:login]
-      before_action :authenticate_request!, only: [:logout, :me]
+      skip_before_action :set_request_context, only: [ :login ]
+      before_action :authenticate_request!, only: [ :logout, :me ]
 
       # POST /api/v1/auth/login
       # Authenticates user and returns JWT tokens

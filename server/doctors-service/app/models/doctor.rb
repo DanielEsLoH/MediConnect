@@ -20,10 +20,10 @@ class Doctor < ApplicationRecord
 
   # PgSearch configuration
   pg_search_scope :search_by_text,
-                  against: [:first_name, :last_name, :bio],
+                  against: [ :first_name, :last_name, :bio ],
                   associated_against: {
                     specialty: :name,
-                    clinic: [:name, :city, :state]
+                    clinic: [ :name, :city, :state ]
                   },
                   using: {
                     tsearch: { prefix: true, any_word: true }
@@ -40,7 +40,7 @@ class Doctor < ApplicationRecord
   scope :by_specialty, ->(specialty_id) { where(specialty_id: specialty_id) if specialty_id.present? }
   scope :by_clinic, ->(clinic_id) { where(clinic_id: clinic_id) if clinic_id.present? }
   scope :by_language, lambda { |language|
-    where("languages @> ?", [language].to_json) if language.present?
+    where("languages @> ?", [ language ].to_json) if language.present?
   }
   scope :with_min_rating, lambda { |min_rating|
     joins(:reviews)

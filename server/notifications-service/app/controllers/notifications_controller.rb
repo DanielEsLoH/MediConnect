@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class NotificationsController < ApplicationController
-  before_action :set_notification, only: [:show, :mark_as_read, :destroy]
+  before_action :set_notification, only: [ :show, :mark_as_read, :destroy ]
 
   # GET /notifications
   def index

@@ -63,17 +63,17 @@ class HealthController < ApplicationController
     # "critical" if no services healthy
     health_status[:status] = if healthy_count == total_count
                                "ok"
-                             elsif healthy_count > 0
+    elsif healthy_count > 0
                                "degraded"
-                             else
+    else
                                "critical"
-                             end
+    end
 
     status_code = case health_status[:status]
-                  when "ok" then :ok
-                  when "degraded" then :ok # Still return 200 for degraded
-                  else :service_unavailable
-                  end
+    when "ok" then :ok
+    when "degraded" then :ok # Still return 200 for degraded
+    else :service_unavailable
+    end
 
     render json: health_status, status: status_code
   end
@@ -121,7 +121,7 @@ class HealthController < ApplicationController
     # Check services in parallel using threads
     threads = services.map do |service_name, url|
       Thread.new do
-        [service_name, check_service(service_name, url)]
+        [ service_name, check_service(service_name, url) ]
       end
     end
 

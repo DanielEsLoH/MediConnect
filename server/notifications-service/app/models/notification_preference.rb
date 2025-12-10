@@ -3,12 +3,12 @@
 class NotificationPreference < ApplicationRecord
   # Validations
   validates :user_id, presence: true, uniqueness: true
-  validates :email_enabled, inclusion: { in: [true, false] }
-  validates :sms_enabled, inclusion: { in: [true, false] }
-  validates :push_enabled, inclusion: { in: [true, false] }
-  validates :appointment_reminders, inclusion: { in: [true, false] }
-  validates :appointment_updates, inclusion: { in: [true, false] }
-  validates :marketing_emails, inclusion: { in: [true, false] }
+  validates :email_enabled, inclusion: { in: [ true, false ] }
+  validates :sms_enabled, inclusion: { in: [ true, false ] }
+  validates :push_enabled, inclusion: { in: [ true, false ] }
+  validates :appointment_reminders, inclusion: { in: [ true, false ] }
+  validates :appointment_updates, inclusion: { in: [ true, false ] }
+  validates :marketing_emails, inclusion: { in: [ true, false ] }
 
   # Class methods
   def self.for_user(user_id)

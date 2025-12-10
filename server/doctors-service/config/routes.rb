@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   # Internal API routes for service-to-service communication
   # These endpoints are called by other microservices
   namespace :internal do
-    resources :doctors, only: [:show] do
+    resources :doctors, only: [ :show ] do
       collection do
         post :batch
       end
@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     namespace :v1 do
-      resources :doctors, only: [:index, :show] do
+      resources :doctors, only: [ :index, :show ] do
         collection do
           get :search
           get :specialties
@@ -38,8 +38,8 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :reviews, only: [:create, :update, :destroy]
-      resources :specialties, only: [:index, :show]
+      resources :reviews, only: [ :create, :update, :destroy ]
+      resources :specialties, only: [ :index, :show ]
     end
   end
 end

@@ -43,7 +43,7 @@ class RequestTracer
     # Log request completion
     log_request_complete(env, request_id, status, duration_ms)
 
-    [status, headers, response]
+    [ status, headers, response ]
   ensure
     # Clean up thread locals
     Thread.current[:request_id] = nil

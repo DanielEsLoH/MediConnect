@@ -30,10 +30,10 @@ class CreateNotifications < ActiveRecord::Migration[8.1]
     add_index :notifications, :status
     add_index :notifications, :scheduled_for
     add_index :notifications, :created_at
-    add_index :notifications, [:user_id, :status]
-    add_index :notifications, [:user_id, :read_at]
-    add_index :notifications, [:status, :scheduled_for]
-    add_index :notifications, [:status, :retry_count]
+    add_index :notifications, [ :user_id, :status ]
+    add_index :notifications, [ :user_id, :read_at ]
+    add_index :notifications, [ :status, :scheduled_for ]
+    add_index :notifications, [ :status, :retry_count ]
     add_index :notifications, :data, using: :gin
   end
 end

@@ -15,6 +15,6 @@ class CreateReviews < ActiveRecord::Migration[8.1]
     add_index :reviews, :user_id
     add_index :reviews, :rating
     add_index :reviews, :verified
-    add_index :reviews, [:doctor_id, :user_id], unique: true
+    add_index :reviews, [ :doctor_id, :user_id ], unique: true
   end
 end

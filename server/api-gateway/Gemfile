@@ -23,7 +23,7 @@ gem "faraday-retry", "~> 2.2"
 gem "lograge", "~> 0.14"
 
 # Environment configuration
-gem "dotenv-rails", groups: [:development, :test]
+gem "dotenv-rails", groups: [ :development, :test ]
 
 # Performance
 gem "bootsnap", require: false
@@ -49,6 +49,7 @@ group :development, :test do
   # Linting
   gem "rubocop", require: false
   gem "rubocop-rails", require: false
+  gem "rubocop-rails-omakase", require: false
   gem "rubocop-rspec", require: false
   gem "rubocop-performance", require: false
 end

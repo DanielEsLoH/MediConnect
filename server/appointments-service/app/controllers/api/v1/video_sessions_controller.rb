@@ -3,7 +3,7 @@
 module Api
   module V1
     class VideoSessionsController < ApplicationController
-      before_action :set_video_session, only: [:show, :end]
+      before_action :set_video_session, only: [ :show, :end ]
 
       # POST /api/v1/video_sessions
       def create
@@ -11,7 +11,7 @@ module Api
 
         unless appointment
           render json: {
-            errors: ["Appointment not found"],
+            errors: [ "Appointment not found" ],
             message: "Appointment with id #{params[:appointment_id]} does not exist"
           }, status: :not_found
           return
@@ -66,7 +66,7 @@ module Api
         end
       rescue ActiveRecord::RecordNotFound
         render json: {
-          errors: ["Video session not found"],
+          errors: [ "Video session not found" ],
           message: "Video session with id #{params[:id]} does not exist"
         }, status: :not_found
       end
@@ -95,7 +95,7 @@ module Api
         @video_session = VideoSession.find(params[:id])
       rescue ActiveRecord::RecordNotFound
         render json: {
-          errors: ["Video session not found"],
+          errors: [ "Video session not found" ],
           message: "Video session with id #{params[:id]} does not exist"
         }, status: :not_found
       end

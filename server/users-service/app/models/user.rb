@@ -43,7 +43,7 @@ class User < ApplicationRecord
   end
 
   def as_json(options = {})
-    super(options.merge(except: [:password_digest]))
+    super(options.merge(except: [ :password_digest ]))
   end
 
   private

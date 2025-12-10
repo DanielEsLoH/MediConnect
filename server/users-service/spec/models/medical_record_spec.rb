@@ -30,7 +30,7 @@ RSpec.describe MedicalRecord, type: :model do
         old_record = create(:medical_record, user: user, recorded_at: 1.month.ago)
         new_record = create(:medical_record, user: user, recorded_at: 1.day.ago)
 
-        expect(MedicalRecord.recent).to eq([new_record, old_record])
+        expect(MedicalRecord.recent).to eq([ new_record, old_record ])
       end
     end
 
@@ -39,7 +39,7 @@ RSpec.describe MedicalRecord, type: :model do
         diagnosis = create(:medical_record, :diagnosis, user: user)
         create(:medical_record, :prescription, user: user)
 
-        expect(MedicalRecord.by_type(:diagnosis)).to eq([diagnosis])
+        expect(MedicalRecord.by_type(:diagnosis)).to eq([ diagnosis ])
       end
     end
 
@@ -49,7 +49,7 @@ RSpec.describe MedicalRecord, type: :model do
         create(:medical_record, user: user, recorded_at: 15.days.ago)
 
         result = MedicalRecord.for_date_range(7.days.ago, Date.today)
-        expect(result).to eq([in_range])
+        expect(result).to eq([ in_range ])
       end
     end
   end

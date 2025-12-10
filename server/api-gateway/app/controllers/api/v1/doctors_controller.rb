@@ -6,7 +6,7 @@ module Api
     # Proxies requests to the doctors-service
     class DoctorsController < Api::BaseController
       # Optional authentication - some endpoints may show more data when authenticated
-      before_action :authenticate_request, only: [:index, :show, :search]
+      before_action :authenticate_request, only: [ :index, :show, :search ]
 
       # GET /api/v1/doctors
       # Lists all doctors with optional filtering

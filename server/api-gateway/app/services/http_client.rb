@@ -55,7 +55,7 @@ class HttpClient
   DEFAULT_TIMEOUT = 10
   DEFAULT_OPEN_TIMEOUT = 5
   DEFAULT_MAX_RETRIES = 3
-  RETRY_STATUSES = [408, 429, 500, 502, 503, 504].freeze
+  RETRY_STATUSES = [ 408, 429, 500, 502, 503, 504 ].freeze
   RETRY_EXCEPTIONS = [
     Faraday::TimeoutError,
     Faraday::ConnectionFailed,

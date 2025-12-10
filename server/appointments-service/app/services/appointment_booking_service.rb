@@ -92,7 +92,7 @@ class AppointmentBookingService
     existing_appointments = Appointment
       .where(doctor_id: @params[:doctor_id])
       .where(appointment_date: @params[:appointment_date])
-      .where.not(status: [:cancelled, :no_show])
+      .where.not(status: [ :cancelled, :no_show ])
       .where("(start_time::time, end_time::time) OVERLAPS (?::time, ?::time)", @params[:start_time], @params[:end_time])
 
     if existing_appointments.exists?

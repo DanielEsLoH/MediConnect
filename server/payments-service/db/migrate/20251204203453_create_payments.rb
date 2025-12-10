@@ -29,6 +29,6 @@ class CreatePayments < ActiveRecord::Migration[8.1]
     add_index :payments, :status
     add_index :payments, :stripe_payment_intent_id, unique: true
     add_index :payments, :created_at
-    add_index :payments, [:user_id, :status]
+    add_index :payments, [ :user_id, :status ]
   end
 end

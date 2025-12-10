@@ -3,7 +3,7 @@
 module Api
   module V1
     class DoctorsController < ApplicationController
-      before_action :set_doctor, only: [:show, :availability, :reviews]
+      before_action :set_doctor, only: [ :show, :availability, :reviews ]
 
       # GET /api/v1/doctors
       def index
@@ -19,10 +19,10 @@ module Api
         render json: {
           doctors: @doctors.as_json(
             include: {
-              specialty: { only: [:id, :name] },
-              clinic: { only: [:id, :name, :city, :state] }
+              specialty: { only: [ :id, :name ] },
+              clinic: { only: [ :id, :name, :city, :state ] }
             },
-            methods: [:average_rating, :total_reviews]
+            methods: [ :average_rating, :total_reviews ]
           ),
           meta: pagination_meta(@doctors)
         }
@@ -33,11 +33,11 @@ module Api
         render json: {
           doctor: @doctor.as_json(
             include: {
-              specialty: { only: [:id, :name, :description] },
-              clinic: { only: [:id, :name, :address, :city, :state, :zip_code, :phone_number] },
-              schedules: { only: [:id, :day_of_week, :start_time, :end_time, :slot_duration_minutes] }
+              specialty: { only: [ :id, :name, :description ] },
+              clinic: { only: [ :id, :name, :address, :city, :state, :zip_code, :phone_number ] },
+              schedules: { only: [ :id, :day_of_week, :start_time, :end_time, :slot_duration_minutes ] }
             },
-            methods: [:average_rating, :total_reviews]
+            methods: [ :average_rating, :total_reviews ]
           )
         }
       end
@@ -59,10 +59,10 @@ module Api
         render json: {
           doctors: @doctors.as_json(
             include: {
-              specialty: { only: [:id, :name] },
-              clinic: { only: [:id, :name, :city, :state] }
+              specialty: { only: [ :id, :name ] },
+              clinic: { only: [ :id, :name, :city, :state ] }
             },
-            methods: [:average_rating, :total_reviews]
+            methods: [ :average_rating, :total_reviews ]
           ),
           meta: pagination_meta(@doctors)
         }
@@ -105,7 +105,7 @@ module Api
 
         render json: {
           specialties: @specialties.as_json(
-            methods: [:doctors_count]
+            methods: [ :doctors_count ]
           )
         }
       end

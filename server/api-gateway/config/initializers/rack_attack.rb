@@ -121,7 +121,7 @@ class Rack::Attack
       request_id: request.env["action_dispatch.request_id"] || Thread.current[:request_id]
     }.to_json
 
-    [429, headers, [body]]
+    [ 429, headers, [ body ] ]
   end
 
   # Custom response for blocked requests
@@ -135,7 +135,7 @@ class Rack::Attack
       request_id: request.env["action_dispatch.request_id"] || Thread.current[:request_id]
     }.to_json
 
-    [403, headers, [body]]
+    [ 403, headers, [ body ] ]
   end
 
   ### Logging ###
