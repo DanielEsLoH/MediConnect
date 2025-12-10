@@ -3,14 +3,14 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      before_action :set_user, only: [:show, :update, :destroy]
+      before_action :set_user, only: [ :show, :update, :destroy ]
 
       # GET /api/v1/users
       def index
         @users = User.active.page(params[:page]).per(params[:per_page] || 25)
 
         render json: {
-          users: @users.as_json(except: [:password_digest]),
+          users: @users.as_json(except: [ :password_digest ]),
           meta: pagination_meta(@users)
         }
       end
@@ -19,10 +19,10 @@ module Api
       def show
         render json: {
           user: @user.as_json(
-            except: [:password_digest],
+            except: [ :password_digest ],
             include: {
-              medical_records: { only: [:id, :record_type, :title, :recorded_at] },
-              allergies: { only: [:id, :allergen, :severity, :active] }
+              medical_records: { only: [ :id, :record_type, :title, :recorded_at ] },
+              allergies: { only: [ :id, :allergen, :severity, :active ] }
             }
           )
         }
@@ -33,7 +33,7 @@ module Api
         @user = AuthenticationService.register(user_params)
 
         render json: {
-          user: @user.as_json(except: [:password_digest])
+          user: @user.as_json(except: [ :password_digest ])
         }, status: :created
       rescue AuthenticationService::ValidationError => e
         render json: { error: e.message }, status: :unprocessable_entity
@@ -43,7 +43,7 @@ module Api
       def update
         if @user.update(user_update_params)
           render json: {
-            user: @user.as_json(except: [:password_digest])
+            user: @user.as_json(except: [ :password_digest ])
           }
         else
           render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
@@ -67,7 +67,7 @@ module Api
         @users = @users.page(params[:page]).per(params[:per_page] || 25)
 
         render json: {
-          users: @users.as_json(except: [:password_digest]),
+          users: @users.as_json(except: [ :password_digest ]),
           meta: pagination_meta(@users)
         }
       end

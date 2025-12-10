@@ -173,7 +173,7 @@ class JsonWebToken
       return unless redis_available?
 
       # Calculate TTL based on token expiration
-      ttl = [exp - Time.current.to_i, 0].max
+      ttl = [ exp - Time.current.to_i, 0 ].max
 
       # Store in Redis with expiration (no need to keep blacklist entries forever)
       redis.setex("jwt:revoked:#{jti}", ttl + 60, "1")

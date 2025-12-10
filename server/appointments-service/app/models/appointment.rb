@@ -55,14 +55,14 @@ class Appointment < ApplicationRecord
   scope :for_clinic, ->(clinic_id) { where(clinic_id: clinic_id) if clinic_id.present? }
   scope :by_status, ->(status) { where(status: status) if status.present? }
   scope :by_consultation_type, ->(type) { where(consultation_type: type) if type.present? }
-  scope :upcoming, -> { where("appointment_date >= ?", Date.current).where.not(status: [:cancelled, :completed, :no_show]) }
-  scope :past, -> { where("appointment_date < ?", Date.current).or(where(status: [:completed, :no_show])) }
+  scope :upcoming, -> { where("appointment_date >= ?", Date.current).where.not(status: [ :cancelled, :completed, :no_show ]) }
+  scope :past, -> { where("appointment_date < ?", Date.current).or(where(status: [ :completed, :no_show ])) }
   scope :on_date, ->(date) { where(appointment_date: date) if date.present? }
   scope :between_dates, lambda { |start_date, end_date|
     where(appointment_date: start_date..end_date) if start_date.present? && end_date.present?
   }
-  scope :confirmed_or_completed, -> { where(status: [:confirmed, :in_progress, :completed]) }
-  scope :cancellable, -> { where(status: [:pending, :confirmed]) }
+  scope :confirmed_or_completed, -> { where(status: [ :confirmed, :in_progress, :completed ]) }
+  scope :cancellable, -> { where(status: [ :pending, :confirmed ]) }
   scope :expired_pending, -> { pending.where("created_at < ?", 30.minutes.ago) }
   scope :ordered_by_date, -> { order(appointment_date: :asc, start_time: :asc) }
   scope :recent, -> { order(created_at: :desc) }
@@ -156,8 +156,8 @@ class Appointment < ApplicationRecord
 
   def as_json(options = {})
     super(options.merge(
-      methods: [:scheduled_datetime, :end_datetime],
-      except: [:metadata]
+      methods: [ :scheduled_datetime, :end_datetime ],
+      except: [ :metadata ]
     ))
   end
 
@@ -204,7 +204,7 @@ class Appointment < ApplicationRecord
 
     overlapping = Appointment.where(doctor_id: doctor_id)
                              .where(appointment_date: appointment_date)
-                             .where.not(status: [:cancelled, :no_show])
+                             .where.not(status: [ :cancelled, :no_show ])
                              .where.not(id: id)
                              .where("(start_time::time, end_time::time) OVERLAPS (?::time, ?::time)", start_time, end_time)
 
@@ -230,17 +230,17 @@ class Appointment < ApplicationRecord
 
   def publish_appointment_updated_event
     event_type = case status
-                 when "confirmed"
+    when "confirmed"
                    "appointment.confirmed"
-                 when "cancelled"
+    when "cancelled"
                    "appointment.cancelled"
-                 when "completed"
+    when "completed"
                    "appointment.completed"
-                 when "no_show"
+    when "no_show"
                    "appointment.no_show"
-                 else
+    else
                    "appointment.updated"
-                 end
+    end
 
     EventPublisher.publish(event_type, {
       appointment_id: id,

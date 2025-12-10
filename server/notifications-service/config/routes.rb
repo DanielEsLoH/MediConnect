@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   get "health", to: "health#show"
 
   # Notifications routes
-  resources :notifications, only: [:index, :show, :create, :destroy] do
+  resources :notifications, only: [ :index, :show, :create, :destroy ] do
     collection do
       get :unread_count
       post :mark_all_as_read
@@ -20,5 +20,5 @@ Rails.application.routes.draw do
   end
 
   # Notification preferences routes
-  resources :notification_preferences, only: [:show, :update]
+  resources :notification_preferences, only: [ :show, :update ]
 end

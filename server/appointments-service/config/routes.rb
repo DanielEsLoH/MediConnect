@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   # Internal API routes for service-to-service communication
   # These endpoints are called by other microservices
   namespace :internal do
-    resources :appointments, only: [:show] do
+    resources :appointments, only: [ :show ] do
       collection do
         post :batch
         get "by_user/:user_id", to: "appointments#by_user", as: :by_user
@@ -42,7 +42,7 @@ Rails.application.routes.draw do
       end
 
       # Video sessions
-      resources :video_sessions, only: [:create, :show] do
+      resources :video_sessions, only: [ :create, :show ] do
         member do
           post :start
           post :end

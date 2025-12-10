@@ -29,7 +29,7 @@ RSpec.describe Allergy, type: :model do
         severe_allergy = create(:allergy, :severe, user: user)
         create(:allergy, :mild, user: user)
 
-        expect(Allergy.by_severity(:severe)).to eq([severe_allergy])
+        expect(Allergy.by_severity(:severe)).to eq([ severe_allergy ])
       end
     end
 
@@ -38,7 +38,7 @@ RSpec.describe Allergy, type: :model do
         active = create(:allergy, user: user, active: true)
         create(:allergy, :inactive, user: user)
 
-        expect(Allergy.active_allergies).to eq([active])
+        expect(Allergy.active_allergies).to eq([ active ])
       end
     end
 
@@ -48,7 +48,7 @@ RSpec.describe Allergy, type: :model do
         life_threatening = create(:allergy, :life_threatening, user: user)
         create(:allergy, :mild, user: user)
 
-        expect(Allergy.critical).to match_array([severe, life_threatening])
+        expect(Allergy.critical).to match_array([ severe, life_threatening ])
       end
     end
   end

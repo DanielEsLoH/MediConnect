@@ -3,7 +3,7 @@
 module Api
   module V1
     class AppointmentsController < ApplicationController
-      before_action :set_appointment, only: [:show, :update, :destroy, :confirm, :cancel, :complete]
+      before_action :set_appointment, only: [ :show, :update, :destroy, :confirm, :cancel, :complete ]
 
       # GET /api/v1/appointments
       def index
@@ -155,7 +155,7 @@ module Api
 
         if user_id.blank? && doctor_id.blank?
           render json: {
-            errors: ["user_id or doctor_id is required"],
+            errors: [ "user_id or doctor_id is required" ],
             message: "Missing required parameter"
           }, status: :bad_request
           return
@@ -183,7 +183,7 @@ module Api
 
         if user_id.blank? && doctor_id.blank?
           render json: {
-            errors: ["user_id or doctor_id is required"],
+            errors: [ "user_id or doctor_id is required" ],
             message: "Missing required parameter"
           }, status: :bad_request
           return
@@ -214,7 +214,7 @@ module Api
         @appointment = Appointment.find(params[:id])
       rescue ActiveRecord::RecordNotFound
         render json: {
-          errors: ["Appointment not found"],
+          errors: [ "Appointment not found" ],
           message: "Appointment with id #{params[:id]} does not exist"
         }, status: :not_found
       end

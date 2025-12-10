@@ -45,7 +45,7 @@ RSpec.describe User, type: :model do
 
     describe "phone number validation" do
       it "accepts valid phone formats" do
-        valid_phones = ["+1234567890", "123-456-7890", "(123) 456-7890"]
+        valid_phones = [ "+1234567890", "123-456-7890", "(123) 456-7890" ]
         valid_phones.each do |phone|
           user = build(:user, phone_number: phone)
           expect(user).to be_valid
@@ -72,19 +72,19 @@ RSpec.describe User, type: :model do
         active_user = create(:user, active: true)
         create(:user, :inactive)
 
-        expect(User.active).to eq([active_user])
+        expect(User.active).to eq([ active_user ])
       end
     end
 
     describe ".by_email" do
       it "finds user by email" do
         user = create(:user, email: "test@example.com")
-        expect(User.by_email("test@example.com")).to eq([user])
+        expect(User.by_email("test@example.com")).to eq([ user ])
       end
 
       it "is case insensitive" do
         user = create(:user, email: "test@example.com")
-        expect(User.by_email("TEST@EXAMPLE.COM")).to eq([user])
+        expect(User.by_email("TEST@EXAMPLE.COM")).to eq([ user ])
       end
     end
 

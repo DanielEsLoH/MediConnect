@@ -98,7 +98,7 @@ class HttpClient
   DEFAULT_MAX_RETRIES = ENV.fetch("HTTP_CLIENT_MAX_RETRIES", 3).to_i
   DEFAULT_RETRY_INTERVAL = ENV.fetch("HTTP_CLIENT_RETRY_INTERVAL", 0.5).to_f
 
-  RETRY_STATUSES = [408, 429, 500, 502, 503, 504].freeze
+  RETRY_STATUSES = [ 408, 429, 500, 502, 503, 504 ].freeze
   RETRY_EXCEPTIONS = [
     Faraday::TimeoutError,
     Faraday::ConnectionFailed,

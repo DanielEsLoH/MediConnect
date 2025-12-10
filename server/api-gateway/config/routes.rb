@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       # ============================================
       # Users service proxy
       # ============================================
-      resources :users, only: [:index, :show, :create, :update] do
+      resources :users, only: [ :index, :show, :create, :update ] do
         collection do
           get :search
         end
@@ -40,7 +40,7 @@ Rails.application.routes.draw do
       # ============================================
       # Doctors service proxy
       # ============================================
-      resources :doctors, only: [:index, :show] do
+      resources :doctors, only: [ :index, :show ] do
         collection do
           get :search
           get :specialties
@@ -54,7 +54,7 @@ Rails.application.routes.draw do
       # ============================================
       # Appointments service proxy
       # ============================================
-      resources :appointments, only: [:index, :show, :create, :update, :destroy] do
+      resources :appointments, only: [ :index, :show, :create, :update, :destroy ] do
         collection do
           get :upcoming
           get :past
@@ -69,7 +69,7 @@ Rails.application.routes.draw do
       # ============================================
       # Notifications service proxy (if needed)
       # ============================================
-      resources :notifications, only: [:index, :show, :update] do
+      resources :notifications, only: [ :index, :show, :update ] do
         collection do
           post :mark_all_read
           get :unread_count
@@ -79,7 +79,7 @@ Rails.application.routes.draw do
       # ============================================
       # Payments service proxy (if needed)
       # ============================================
-      resources :payments, only: [:index, :show, :create] do
+      resources :payments, only: [ :index, :show, :create ] do
         collection do
           get :methods
           post :methods, action: :add_payment_method

@@ -18,9 +18,9 @@ module Api
     #
     class PaymentsController < ApplicationController
       # Skip authentication for webhook endpoint (uses signature verification)
-      skip_before_action :set_request_id, only: [:webhook]
-      before_action :authenticate_request, except: [:webhook]
-      before_action :set_payment, only: [:show]
+      skip_before_action :set_request_id, only: [ :webhook ]
+      before_action :authenticate_request, except: [ :webhook ]
+      before_action :set_payment, only: [ :show ]
 
       # GET /api/v1/payments
       # Lists payments for the current user (or all payments for admins)
@@ -36,8 +36,8 @@ module Api
         payments = payments.recent
 
         # Apply pagination
-        page = [params[:page].to_i, 1].max
-        per_page = [[params[:per_page].to_i, 1].max, 100].min
+        page = [ params[:page].to_i, 1 ].max
+        per_page = [ [ params[:per_page].to_i, 1 ].max, 100 ].min
         per_page = 20 if per_page.zero?
 
         offset = (page - 1) * per_page

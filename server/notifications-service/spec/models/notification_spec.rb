@@ -90,14 +90,14 @@ RSpec.describe Notification, type: :model do
       it "returns notifications for the specified user" do
         notifications = Notification.for_user(user_id)
         expect(notifications.count).to eq(4)
-        expect(notifications.pluck(:user_id).uniq).to eq([user_id])
+        expect(notifications.pluck(:user_id).uniq).to eq([ user_id ])
       end
     end
 
     describe ".by_type" do
       it "returns notifications of the specified type" do
         notifications = Notification.by_type(:appointment_created)
-        expect(notifications.pluck(:notification_type).uniq).to eq(["appointment_created"])
+        expect(notifications.pluck(:notification_type).uniq).to eq([ "appointment_created" ])
       end
     end
 
@@ -105,7 +105,7 @@ RSpec.describe Notification, type: :model do
       it "returns notifications with the specified delivery method" do
         notifications = Notification.by_delivery_method(:email)
         expect(notifications.count).to eq(2)
-        expect(notifications.pluck(:delivery_method).uniq).to eq(["email"])
+        expect(notifications.pluck(:delivery_method).uniq).to eq([ "email" ])
       end
     end
 

@@ -13,7 +13,7 @@ class CreateSchedules < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    add_index :schedules, [:doctor_id, :day_of_week]
+    add_index :schedules, [ :doctor_id, :day_of_week ]
     add_index :schedules, :active
   end
 end

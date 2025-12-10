@@ -451,11 +451,11 @@ video_appointments.each do |appointment|
 
   session_status = if appointment.completed?
                      "ended"
-                   elsif appointment.appointment_date < Date.current
+  elsif appointment.appointment_date < Date.current
                      "ended"
-                   else
+  else
                      "created"
-                   end
+  end
 
   video_session = VideoSession.find_or_initialize_by(appointment_id: appointment.id)
   video_session.assign_attributes(

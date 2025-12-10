@@ -87,7 +87,7 @@ class MigrateToUuidPrimaryKeys < ActiveRecord::Migration[8.1]
     end
 
     add_index :schedules, :doctor_id
-    add_index :schedules, [:doctor_id, :day_of_week]
+    add_index :schedules, [ :doctor_id, :day_of_week ]
     add_index :schedules, :active
     add_foreign_key :schedules, :doctors
 
@@ -105,7 +105,7 @@ class MigrateToUuidPrimaryKeys < ActiveRecord::Migration[8.1]
 
     add_index :reviews, :doctor_id
     add_index :reviews, :user_id
-    add_index :reviews, [:doctor_id, :user_id], unique: true
+    add_index :reviews, [ :doctor_id, :user_id ], unique: true
     add_index :reviews, :rating
     add_index :reviews, :verified
     add_foreign_key :reviews, :doctors
@@ -192,7 +192,7 @@ class MigrateToUuidPrimaryKeys < ActiveRecord::Migration[8.1]
     end
 
     add_index :schedules, :doctor_id
-    add_index :schedules, [:doctor_id, :day_of_week]
+    add_index :schedules, [ :doctor_id, :day_of_week ]
     add_index :schedules, :active
     add_foreign_key :schedules, :doctors
 
@@ -208,7 +208,7 @@ class MigrateToUuidPrimaryKeys < ActiveRecord::Migration[8.1]
 
     add_index :reviews, :doctor_id
     add_index :reviews, :user_id
-    add_index :reviews, [:doctor_id, :user_id], unique: true
+    add_index :reviews, [ :doctor_id, :user_id ], unique: true
     add_index :reviews, :rating
     add_index :reviews, :verified
     add_foreign_key :reviews, :doctors

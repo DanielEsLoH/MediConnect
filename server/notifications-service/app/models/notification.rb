@@ -102,8 +102,8 @@ class Notification < ApplicationRecord
 
   def as_json(options = {})
     super(options.merge(
-      methods: [:unread?],
-      except: [:error_message]
+      methods: [ :unread? ],
+      except: [ :error_message ]
     ))
   end
 

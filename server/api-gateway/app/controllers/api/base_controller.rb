@@ -22,17 +22,17 @@ module Api
     # @return [void]
     def proxy_request(service:, path:, method: :get, body: nil, params: {})
       response = case method
-                 when :get
+      when :get
                    HttpClient.get(service, path, params: params, headers: proxy_headers)
-                 when :post
+      when :post
                    HttpClient.post(service, path, body, headers: proxy_headers)
-                 when :put
+      when :put
                    HttpClient.put(service, path, body, headers: proxy_headers)
-                 when :patch
+      when :patch
                    HttpClient.patch(service, path, body, headers: proxy_headers)
-                 when :delete
+      when :delete
                    HttpClient.delete(service, path, headers: proxy_headers)
-                 end
+      end
 
       render_proxy_response(response)
     end

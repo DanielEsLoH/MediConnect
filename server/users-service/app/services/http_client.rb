@@ -111,7 +111,7 @@ class HttpClient
   DEFAULT_RETRY_INTERVAL = ENV.fetch("HTTP_CLIENT_RETRY_INTERVAL", 0.5).to_f
 
   # HTTP status codes that should trigger a retry
-  RETRY_STATUSES = [408, 429, 500, 502, 503, 504].freeze
+  RETRY_STATUSES = [ 408, 429, 500, 502, 503, 504 ].freeze
 
   # Exceptions that should trigger a retry
   RETRY_EXCEPTIONS = [

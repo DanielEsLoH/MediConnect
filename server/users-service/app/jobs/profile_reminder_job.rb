@@ -24,7 +24,7 @@ class ProfileReminderJob
   private
 
   def profile_complete?(user)
-    required_fields = [:date_of_birth, :gender, :phone_number, :address, :city, :state, :zip_code]
+    required_fields = [ :date_of_birth, :gender, :phone_number, :address, :city, :state, :zip_code ]
     required_fields.all? { |field| user.send(field).present? }
   end
 end

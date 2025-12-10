@@ -132,9 +132,9 @@ class EventConsumer
 
       message = if cancelled_by == "doctor"
                   "Your appointment has been cancelled by the doctor"
-                else
+      else
                   "Your appointment has been cancelled"
-                end
+      end
       message += ". Reason: #{reason}" if reason.present?
 
       create_notification(

@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :video_session do
-    association :appointment, factory: [:appointment, :video_consultation]
+    association :appointment, factory: [ :appointment, :video_consultation ]
     room_name { "mediconnect-#{SecureRandom.hex(8)}" }
     session_url { "https://mediconnect.daily.co/#{room_name}" }
     provider { "daily" }

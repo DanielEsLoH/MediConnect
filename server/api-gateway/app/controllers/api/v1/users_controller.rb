@@ -5,8 +5,8 @@ module Api
     # Controller for user management endpoints
     # Proxies requests to the users-service
     class UsersController < Api::BaseController
-      before_action :authenticate_request!, except: [:create]
-      before_action :require_admin!, only: [:index]
+      before_action :authenticate_request!, except: [ :create ]
+      before_action :require_admin!, only: [ :index ]
 
       # GET /api/v1/users
       # Lists all users (admin only)

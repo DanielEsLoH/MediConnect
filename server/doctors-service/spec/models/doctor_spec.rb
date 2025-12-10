@@ -35,7 +35,7 @@ RSpec.describe Doctor, type: :model do
         active_doctor = create(:doctor, active: true)
         create(:doctor, :inactive)
 
-        expect(Doctor.active).to eq([active_doctor])
+        expect(Doctor.active).to eq([ active_doctor ])
       end
     end
 
@@ -44,7 +44,7 @@ RSpec.describe Doctor, type: :model do
         accepting = create(:doctor, accepting_new_patients: true)
         create(:doctor, :not_accepting_patients)
 
-        expect(Doctor.accepting_patients).to eq([accepting])
+        expect(Doctor.accepting_patients).to eq([ accepting ])
       end
     end
 
@@ -54,7 +54,7 @@ RSpec.describe Doctor, type: :model do
         doctor = create(:doctor, specialty: specialty)
         create(:doctor)
 
-        expect(Doctor.by_specialty(specialty.id)).to eq([doctor])
+        expect(Doctor.by_specialty(specialty.id)).to eq([ doctor ])
       end
     end
   end

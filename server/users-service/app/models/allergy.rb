@@ -23,7 +23,7 @@ class Allergy < ApplicationRecord
   # Scopes
   scope :by_severity, ->(severity_level) { where(severity: severity_level) if severity_level.present? }
   scope :active_allergies, -> { where(active: true) }
-  scope :critical, -> { where(severity: [:severe, :life_threatening]) }
+  scope :critical, -> { where(severity: [ :severe, :life_threatening ]) }
 
   private
 
