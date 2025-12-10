@@ -17,6 +17,9 @@ gem "jwt", "~> 2.7"
 # Payment processing
 gem "stripe", "~> 10.0"
 
+# Message broker
+gem "bunny", "~> 2.22"
+
 # API
 gem "rack-cors"
 gem "jbuilder"

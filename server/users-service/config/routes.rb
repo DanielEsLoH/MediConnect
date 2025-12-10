@@ -10,20 +10,29 @@ Rails.application.routes.draw do
 
   # Internal API routes for service-to-service communication
   # These endpoints are called by other microservices
-  namespace :internal do
-    resources :users, only: [ :show ] do
-      collection do
-        post :batch
-        get :by_email
+  # api-gateway expects /api/internal/...
+  namespace :api do
+    namespace :internal do
+      post "authenticate", to: "authentication#authenticate"
+      
+      resources :users, only: [ :show ] do
+        collection do
+          post :batch
+          get :by_email
+        end
+        member do
+          get :contact_info
+          get :exists
+        end
       end
-      member do
-        get :contact_info
-        get :exists
-      end
+      
+      # Password reset endpoints
+      post "password/reset", to: "password_reset#create"
+      put "password/reset", to: "password_reset#update"
     end
   end
 
-  # API routes
+  # External API routes
   namespace :api do
     namespace :v1 do
       resources :users, only: [ :index, :show, :create, :update, :destroy ] do

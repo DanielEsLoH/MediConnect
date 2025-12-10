@@ -159,7 +159,7 @@ class HttpClient
       response = connection.public_send(method) do |req|
         req.url path
         req.headers.merge!(request_headers)
-        req.params = params if params.any?
+        req.params = params.to_h if params.present?
         req.body = body.to_json if body
       end
 
@@ -192,7 +192,6 @@ class HttpClient
 
         # Response middleware
         conn.response :json, content_type: /\bjson$/
-        conn.response :raise_error, false # We handle errors ourselves
 
         # Retry middleware with exponential backoff
         conn.request :retry, {
@@ -220,7 +219,8 @@ class HttpClient
       headers = {
         "Content-Type" => "application/json",
         "Accept" => "application/json",
-        "User-Agent" => "MediConnect-API-Gateway/1.0"
+        "User-Agent" => "MediConnect-API-Gateway/1.0",
+        "X-Internal-Service" => "api-gateway"
       }
 
       # Add request ID for distributed tracing if available

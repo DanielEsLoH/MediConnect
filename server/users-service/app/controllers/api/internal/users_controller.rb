@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-module Internal
-  # Internal API controller for user data
+module Api
+  module Internal
+    # Internal API controller for user data
   # Called by other microservices to fetch user information
   #
   # @example Fetch user from Notifications Service
@@ -132,4 +133,5 @@ module Internal
       }
     end
   end
+end
 end

@@ -158,7 +158,7 @@ class AuthenticationService
 
       Result.new(
         success: true,
-        user: payload.slice(:user_id, :email, :role, :first_name, :last_name).to_h
+        user: payload.slice(:user_id, :email, :role, :first_name, :last_name).to_h.symbolize_keys
       )
     rescue JsonWebToken::ExpiredTokenError
       Result.new(
