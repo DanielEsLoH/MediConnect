@@ -21,7 +21,7 @@ class Appointment < ApplicationRecord
     patient: "patient",
     doctor: "doctor",
     system: "system"
-  }, prefix: :cancelled_by, validate: true
+  }, prefix: :cancelled_by
 
   # Associations
   has_one :video_session, dependent: :destroy
