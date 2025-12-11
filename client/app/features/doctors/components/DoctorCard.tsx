@@ -130,7 +130,7 @@ export function DoctorCard({ doctor, className }: DoctorCardProps) {
 
         {/* Action Button - pushed to bottom */}
         <div className="mt-auto pt-4">
-          <Link to={`/appointments/new?doctor_id=${doctor.id}`}>
+          <Link to={`/doctors/${doctor.id}`}>
             <Button variant="primary" fullWidth>
               Book Appointment
             </Button>
