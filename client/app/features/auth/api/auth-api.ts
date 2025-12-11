@@ -22,7 +22,19 @@ export const authApi = {
    * @returns Auth response with token and user data
    */
   register: async (data: RegisterRequest): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>("/users", { user: data });
+    // Explicitly structure the payload to ensure all fields are in the nested user object
+    const payload = {
+      user: {
+        email: data.email,
+        password: data.password,
+        password_confirmation: data.password_confirmation,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        phone_number: data.phone_number,
+        date_of_birth: data.date_of_birth,
+      },
+    };
+    const response = await api.post<AuthResponse>("/users", payload);
     return response.data;
   },
 
