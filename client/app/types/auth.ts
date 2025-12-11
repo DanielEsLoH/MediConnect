@@ -12,7 +12,7 @@ export interface User {
   first_name: string;
   last_name: string;
   role: string;
-  phone?: string;
+  phone_number?: string;
   date_of_birth?: string;
   created_at?: string;
   updated_at?: string;
@@ -35,7 +35,7 @@ export interface RegisterRequest {
   password_confirmation: string;
   first_name: string;
   last_name: string;
-  phone: string;
+  phone_number: string;
   date_of_birth: string;
 }
 

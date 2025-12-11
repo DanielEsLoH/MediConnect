@@ -25,7 +25,7 @@ const registerSchema = z
       .min(2, "Last name must be at least 2 characters")
       .max(50, "Last name must be less than 50 characters"),
     email: z.string().min(1, "Email is required").email("Please enter a valid email address"),
-    phone: z
+    phone_number: z
       .string()
       .min(1, "Phone number is required")
       .regex(/^[\d\s\-+()]+$/, "Please enter a valid phone number"),
@@ -72,7 +72,7 @@ export default function RegisterPage() {
       first_name: "",
       last_name: "",
       email: "",
-      phone: "",
+      phone_number: "",
       date_of_birth: "",
       password: "",
       password_confirmation: "",
@@ -167,9 +167,9 @@ export default function RegisterPage() {
                   type="tel"
                   placeholder="(555) 123-4567"
                   autoComplete="tel"
-                  error={errors.phone?.message}
+                  error={errors.phone_number?.message}
                   disabled={registerMutation.isPending}
-                  {...register("phone")}
+                  {...register("phone_number")}
                 />
                 <Input
                   label="Date of birth"
