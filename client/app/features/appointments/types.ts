@@ -1,4 +1,16 @@
 /**
+ * Embedded doctor information in appointment responses.
+ */
+export interface AppointmentDoctor {
+  /** Doctor's unique identifier */
+  id: number;
+  /** Doctor's full name */
+  full_name: string;
+  /** Doctor's medical specialty */
+  specialty: string;
+}
+
+/**
  * Appointment entity type representing a scheduled medical appointment.
  */
 export interface Appointment {
@@ -24,6 +36,8 @@ export interface Appointment {
   created_at: string;
   /** Timestamp when the appointment was last updated */
   updated_at: string;
+  /** Embedded doctor information (optional, depends on API response) */
+  doctor?: AppointmentDoctor;
 }
 
 /**
