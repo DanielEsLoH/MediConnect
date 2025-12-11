@@ -45,7 +45,7 @@ module Api
           service: :users,
           path: "/api/v1/users",
           method: :post,
-          body: user_params.to_h
+          body: { user: user_params.to_h }
         )
       end
 
@@ -59,7 +59,7 @@ module Api
           service: :users,
           path: "/api/v1/users/#{params[:id]}",
           method: :patch,
-          body: user_update_params.to_h
+          body: { user: user_update_params.to_h }
         )
       end
 
@@ -83,7 +83,7 @@ module Api
           :password_confirmation,
           :first_name,
           :last_name,
-          :phone,
+          :phone_number,
           :date_of_birth,
           :role
         )
@@ -93,7 +93,7 @@ module Api
         params.require(:user).permit(
           :first_name,
           :last_name,
-          :phone,
+          :phone_number,
           :date_of_birth,
           :avatar_url,
           :address,
