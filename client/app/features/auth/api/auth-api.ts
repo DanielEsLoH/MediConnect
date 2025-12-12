@@ -1,5 +1,5 @@
 import api from "~/lib/api";
-import type { AuthResponse, LoginRequest, RegisterRequest, User } from "~/types/auth";
+import type { AuthResponse, LoginRequest, RegisterRequest, UpdateProfileRequest, User } from "~/types/auth";
 
 /**
  * Authentication API service.
@@ -54,5 +54,17 @@ export const authApi = {
    */
   logout: async (): Promise<void> => {
     await api.delete("/auth/logout");
+  },
+
+  /**
+   * Update the current user's profile.
+   * @param data - Partial user profile data to update
+   * @returns Updated user data
+   */
+  updateProfile: async (data: UpdateProfileRequest): Promise<User> => {
+    // Wrap the data in a user object as expected by the backend
+    const payload = { user: data };
+    const response = await api.put<User>("/users", payload);
+    return response.data;
   },
 };
