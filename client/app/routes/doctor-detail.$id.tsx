@@ -838,17 +838,60 @@ export default function DoctorDetailPage() {
 
         {/* Right Column - Booking Card */}
         <div className="order-1 lg:order-2">
-          <BookingCard
-            doctor={doctor}
-            selectedDate={selectedDate}
-            selectedSlot={selectedSlot}
-            consultationType={consultationType}
-            isBooking={bookingMutation.isPending}
-            onDateChange={handleDateChange}
-            onSlotSelect={handleSlotSelect}
-            onConsultationTypeChange={handleConsultationTypeChange}
-            onConfirmBooking={handleConfirmBooking}
-          />
+          <Card className="lg:sticky lg:top-6">
+            <CardContent className="p-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                Book Appointment
+              </h2>
+
+              {/* Fee Display */}
+              <div className="mb-6 p-4 bg-primary-50 dark:bg-primary-950 rounded-lg">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-primary-700 dark:text-primary-300">
+                    Consultation Fee
+                  </span>
+                  <span className="text-2xl font-bold text-primary-900 dark:text-primary-100">
+                    {formatCurrency(doctor.consultation_fee)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Features List */}
+              <ul className="space-y-3 mb-6">
+                <li className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                  <svg className="w-5 h-5 text-success-600 dark:text-success-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Choose your preferred time slot</span>
+                </li>
+                <li className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                  <svg className="w-5 h-5 text-success-600 dark:text-success-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>In-person, video, or phone consultation</span>
+                </li>
+                <li className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                  <svg className="w-5 h-5 text-success-600 dark:text-success-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Secure payment with Stripe</span>
+                </li>
+                <li className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                  <svg className="w-5 h-5 text-success-600 dark:text-success-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Instant confirmation</span>
+                </li>
+              </ul>
+
+              {/* Book Button */}
+              <Link to={`/doctors/${doctor.id}/book`} className="block">
+                <Button variant="primary" fullWidth>
+                  Book Appointment
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
