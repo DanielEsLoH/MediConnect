@@ -4,6 +4,16 @@
  */
 
 /**
+ * Medical history information for a user
+ */
+export interface MedicalHistory {
+  blood_type?: string;
+  allergies?: string[];
+  chronic_conditions?: string[];
+  current_medications?: string[];
+}
+
+/**
  * User entity returned from the API
  */
 export interface User {
@@ -14,8 +24,25 @@ export interface User {
   role: string;
   phone_number?: string;
   date_of_birth?: string;
+  address?: string;
+  emergency_contact_name?: string;
+  emergency_contact_phone?: string;
+  medical_history?: MedicalHistory;
   created_at?: string;
   updated_at?: string;
+}
+
+/**
+ * Profile update request payload (partial user data)
+ */
+export interface UpdateProfileRequest {
+  first_name?: string;
+  last_name?: string;
+  phone_number?: string;
+  date_of_birth?: string;
+  address?: string;
+  emergency_contact_name?: string;
+  emergency_contact_phone?: string;
 }
 
 /**

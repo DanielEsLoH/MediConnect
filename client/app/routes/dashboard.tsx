@@ -56,18 +56,20 @@ export default function DashboardPage() {
                   </span>
                 </dd>
               </div>
-              {user?.phone && (
+              {user?.phone_number && (
                 <div>
                   <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Phone</dt>
-                  <dd className="mt-1 text-base text-gray-900 dark:text-gray-100">{user.phone}</dd>
+                  <dd className="mt-1 text-base text-gray-900 dark:text-gray-100">{user.phone_number}</dd>
                 </div>
               )}
             </dl>
           </CardContent>
           <CardFooter>
-            <Button variant="ghost" size="sm" disabled>
-              Edit Profile (Coming Soon)
-            </Button>
+            <Link to="/profile">
+              <Button variant="ghost" size="sm">
+                Edit Profile
+              </Button>
+            </Link>
           </CardFooter>
         </Card>
 
