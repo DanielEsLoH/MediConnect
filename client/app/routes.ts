@@ -12,6 +12,7 @@ export default [
     route("doctors", "routes/doctors.tsx"),
     route("doctors/:id", "routes/doctor-detail.$id.tsx"),
     route("appointments", "routes/appointments.tsx"),
+    route("payments", "routes/payments.tsx"),
     route("profile", "routes/profile.tsx"),
   ]),
 ] satisfies RouteConfig;
