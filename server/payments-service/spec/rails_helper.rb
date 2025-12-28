@@ -28,6 +28,9 @@ RSpec.configure do |config|
   # FactoryBot configuration
   config.include FactoryBot::Syntax::Methods
 
+  # Time helpers for freeze_time, travel_to, etc.
+  config.include ActiveSupport::Testing::TimeHelpers
+
   # Database Cleaner configuration
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)

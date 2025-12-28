@@ -53,7 +53,7 @@ group :development, :test do
   gem "faker", "~> 3.2"
 
   # N+1 Query Detection
-  gem "bullet", "~> 7.2"
+  gem "bullet", "~> 8.1"
 
   # Linting
   gem "rubocop", require: false

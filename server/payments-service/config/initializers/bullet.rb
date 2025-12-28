@@ -60,7 +60,6 @@ if defined?(Bullet)
     Bullet.bullet_logger = true
   end
 
-  # Stacktrace configuration - show 3 lines for context
-  # This helps identify the source of N+1 queries
-  Bullet.stacktrace_level = 3
+  # Note: stacktrace_level configuration removed in Bullet 8.x
+  # Use stacktrace_includes and stacktrace_excludes instead (configured above)
 end

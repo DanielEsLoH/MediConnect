@@ -37,8 +37,9 @@ module Api
 
         # Apply pagination
         page = [ params[:page].to_i, 1 ].max
-        per_page = [ [ params[:per_page].to_i, 1 ].max, 100 ].min
-        per_page = 20 if per_page.zero?
+        per_page = params[:per_page].to_i
+        per_page = 20 if per_page <= 0
+        per_page = [ per_page, 100 ].min
 
         offset = (page - 1) * per_page
         total_count = payments.count
@@ -61,7 +62,7 @@ module Api
       #
       # @return [JSON] Payment details
       def show
-        authorize_payment_access!
+        return unless authorize_payment_access!
         render json: { payment: serialize_payment(@payment) }
       end
 
@@ -112,7 +113,7 @@ module Api
       # @param description [String] Payment description (optional)
       # @return [JSON] Payment ID and Stripe client_secret
       def create_intent
-        validate_create_intent_params!
+        return unless validate_create_intent_params!
 
         amount = params[:amount].to_f
         appointment_id = params[:appointment_id]
@@ -355,12 +356,13 @@ module Api
       # Verifies the current user can access the payment
       # Admins can access any payment; users can only access their own
       #
-      # @raise Renders 403 Forbidden if unauthorized
+      # @return [Boolean] true if authorized, false if forbidden (and response was rendered)
       def authorize_payment_access!
-        return if current_user_admin?
-        return if @payment.user_id == current_user_id
+        return true if current_user_admin?
+        return true if @payment.user_id == current_user_id
 
         render_forbidden("You do not have permission to view this payment")
+        false
       end
 
       # =============================================================================
@@ -368,6 +370,7 @@ module Api
       # =============================================================================
 
       # Validates required parameters for create_intent
+      # @return [Boolean] true if valid, false if validation failed (and response was rendered)
       def validate_create_intent_params!
         amount = params[:amount]
 
@@ -376,7 +379,7 @@ module Api
             error: "parameter_missing",
             message: "Amount is required"
           }, status: :bad_request
-          return
+          return false
         end
 
         if amount.to_f <= 0
@@ -384,8 +387,10 @@ module Api
             error: "invalid_amount",
             message: "Amount must be greater than zero"
           }, status: :bad_request
-          nil
+          return false
         end
+
+        true
       end
 
       # =============================================================================
