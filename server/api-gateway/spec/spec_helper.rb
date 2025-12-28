@@ -1,16 +1,8 @@
 # frozen_string_literal: true
 
-require "simplecov"
-SimpleCov.start "rails" do
-  add_filter "/spec/"
-  add_filter "/config/"
-  add_filter "/vendor/"
-
-  add_group "Controllers", "app/controllers"
-  add_group "Services", "app/services"
-  add_group "Models", "app/models"
-  add_group "Middleware", "app/middleware"
-end
+# IMPORTANT: SimpleCov must be loaded FIRST, before any other requires
+# This ensures accurate coverage measurement of all application code
+require_relative "support/simplecov_setup"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

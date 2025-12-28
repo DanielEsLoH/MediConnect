@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# IMPORTANT: SimpleCov must be loaded FIRST, before any other requires
+# This ensures accurate coverage measurement of all application code
+require_relative "support/simplecov_setup"
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true

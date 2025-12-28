@@ -52,6 +52,9 @@ group :development, :test do
   gem "factory_bot_rails", "~> 6.4"
   gem "faker", "~> 3.2"
 
+  # N+1 Query Detection
+  gem "bullet", "~> 7.2"
+
   # Linting
   gem "rubocop", require: false
   gem "rubocop-rails", require: false
@@ -65,5 +68,7 @@ group :test do
   gem "webmock", "~> 3.19"
   gem "vcr", "~> 6.2"
   gem "simplecov", require: false
+  gem "simplecov-console", require: false
+  gem "rspec_junit_formatter", "~> 0.6"
   gem "database_cleaner-active_record", "~> 2.1"
 end
