@@ -4,8 +4,12 @@ require "rails_helper"
 
 RSpec.describe NotificationPreference, type: :model do
   describe "validations" do
+    # For uniqueness validation, Shoulda Matchers needs an existing record
+    subject { create(:notification_preference) }
+
     it { should validate_presence_of(:user_id) }
-    it { should validate_uniqueness_of(:user_id) }
+    # UUID column uses case-insensitive uniqueness in PostgreSQL
+    it { should validate_uniqueness_of(:user_id).case_insensitive }
   end
 
   describe ".for_user" do

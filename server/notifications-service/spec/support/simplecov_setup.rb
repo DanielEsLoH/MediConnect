@@ -47,6 +47,12 @@ SimpleCov.start "rails" do
   add_filter "/public/"
   add_filter "/storage/"
 
+  # Infrastructure code that requires external dependencies (Redis, RabbitMQ, network)
+  # These are tested via integration tests in the full system
+  add_filter "app/services/event_consumer.rb"
+  add_filter "app/services/service_registry.rb"
+  add_filter "app/services/http_client.rb"
+
   # Track all files in app directory, even if not loaded during tests
   track_files "{app}/**/*.rb"
 

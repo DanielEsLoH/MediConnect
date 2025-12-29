@@ -11,8 +11,8 @@ RSpec.describe ProcessScheduledNotificationsJob, type: :job do
     end
 
     context "with scheduled notifications ready to send" do
-      let!(:ready_notification1) { create(:notification, :pending, scheduled_for: 1.minute.ago, user_id: user_id) }
-      let!(:ready_notification2) { create(:notification, :pending, scheduled_for: 5.minutes.ago, user_id: user_id) }
+      let!(:ready_notification1) { create(:notification, :pending, :ready_scheduled, user_id: user_id) }
+      let!(:ready_notification2) { create(:notification, :pending, :ready_scheduled, user_id: user_id) }
       let!(:future_notification) { create(:notification, :pending, scheduled_for: 1.hour.from_now, user_id: user_id) }
 
       it "enqueues SendNotificationJob for ready notifications" do

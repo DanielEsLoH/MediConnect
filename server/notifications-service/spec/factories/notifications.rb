@@ -71,6 +71,15 @@ FactoryBot.define do
       scheduled_for { 1.day.from_now }
     end
 
+    # Creates a scheduled notification that is now ready to send
+    # Bypasses the future validation by using after(:create)
+    trait :ready_scheduled do
+      scheduled_for { 1.day.from_now }
+      after(:create) do |notification|
+        notification.update_column(:scheduled_for, 1.minute.ago)
+      end
+    end
+
     trait :high_priority do
       priority { 9 }
     end

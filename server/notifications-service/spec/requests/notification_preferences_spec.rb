@@ -65,8 +65,10 @@ RSpec.describe "Notification Preferences API", type: :request do
     end
 
     it "validates boolean fields" do
+      # Note: Rails type-casts string values to booleans for boolean columns
+      # "invalid" becomes true (non-empty string), so we test with nil
       put "/notification_preferences/#{user_id}", params: {
-        notification_preference: { email_enabled: "invalid" }
+        notification_preference: { email_enabled: nil }
       }
 
       expect(response).to have_http_status(:unprocessable_entity)

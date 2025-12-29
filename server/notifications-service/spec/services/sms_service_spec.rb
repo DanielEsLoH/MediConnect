@@ -32,6 +32,65 @@ RSpec.describe SmsService do
       end
     end
 
+    context "when phone number is in alternative field" do
+      before do
+        notification.data.delete("phone_number")
+        notification.data["phone"] = "+12345678901"
+      end
+
+      it "uses the phone field" do
+        result = service.send_sms
+        expect(result[:success]).to be true
+      end
+    end
+
+    context "when phone number is missing but user data can be fetched" do
+      before do
+        notification.data.delete("phone_number")
+        notification.data.delete("phone")
+        allow(UserLookupService).to receive(:contact_info).and_return({
+          phone_number: "+12345678901"
+        })
+      end
+
+      it "fetches user data from UserLookupService" do
+        expect(UserLookupService).to receive(:contact_info).with(notification.user_id)
+
+        result = service.send_sms
+        expect(result[:success]).to be true
+      end
+    end
+
+    context "when phone number is missing and user data fetch fails" do
+      before do
+        notification.data.delete("phone_number")
+        notification.data.delete("phone")
+        allow(UserLookupService).to receive(:contact_info).and_raise(
+          UserLookupService::ServiceUnavailable.new("Service down")
+        )
+      end
+
+      it "returns failure" do
+        result = service.send_sms
+        expect(result[:success]).to be false
+        expect(result[:error]).to eq("No phone number provided")
+      end
+    end
+
+    context "when phone number is missing and user lookup returns nil" do
+      before do
+        notification.data.delete("phone_number")
+        notification.data.delete("phone")
+        allow(UserLookupService).to receive(:contact_info).and_return(nil)
+      end
+
+      it "returns failure" do
+        result = service.send_sms
+        expect(result[:success]).to be false
+        expect(result[:error]).to eq("No phone number provided")
+      end
+    end
+
     context "when phone number is invalid" do
       before do
         notification.data["phone_number"] = "invalid"
@@ -67,6 +126,20 @@ RSpec.describe SmsService do
         notification.data["phone_number"] = "+1234567890123456"
         result = service.send_sms
         expect(result[:success]).to be false
+      end
+    end
+
+    context "when an error occurs during send" do
+      before do
+        notification.data["phone_number"] = "+12345678901"
+        allow(Rails.logger).to receive(:error)
+        allow(Rails.logger).to receive(:info).and_raise(StandardError.new("Unexpected error"))
+      end
+
+      it "catches the error and returns failure" do
+        result = service.send_sms
+        expect(result[:success]).to be false
+        expect(result[:error]).to eq("Unexpected error")
       end
     end
   end

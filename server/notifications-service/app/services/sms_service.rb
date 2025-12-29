@@ -65,11 +65,10 @@ class SmsService
   end
 
   def valid_phone_number?
-    # Basic validation - starts with + and has 10-15 digits
-    # Or 10 digits without + (US format)
+    # E.164 validation - must start with + and have 10-15 digits
     return false unless phone_number.present?
 
-    phone_number.match?(/^\+?\d{10,15}$/)
+    phone_number.match?(/^\+\d{10,15}$/)
   end
 
   def send_via_twilio

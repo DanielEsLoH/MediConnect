@@ -120,8 +120,8 @@ RSpec.describe Notification, type: :model do
     describe ".unread" do
       it "returns unread notifications (excluding failed)" do
         notifications = Notification.unread
-        expect(notifications.count).to eq(2) # pending and sent
-        expect(notifications.pluck(:status)).to match_array(%w[pending sent])
+        expect(notifications.count).to eq(3) # pending, sent, and delivered (all have read_at: nil)
+        expect(notifications.pluck(:status)).to match_array(%w[pending sent delivered])
       end
     end
 
@@ -160,13 +160,13 @@ RSpec.describe Notification, type: :model do
     describe ".ready_for_delivery" do
       before do
         create(:notification, :pending, scheduled_for: nil, user_id: user_id)
-        create(:notification, :pending, scheduled_for: 1.minute.ago, user_id: user_id)
+        create(:notification, :pending, :ready_scheduled, user_id: user_id)
         create(:notification, :pending, scheduled_for: 1.hour.from_now, user_id: user_id)
       end
 
       it "returns pending notifications ready to be sent" do
         notifications = Notification.ready_for_delivery
-        expect(notifications.count).to eq(3) # Including the existing pending one
+        expect(notifications.count).to eq(3) # Including the existing pending one + nil scheduled + ready scheduled
         expect(notifications.all?(&:pending?)).to be true
       end
     end
@@ -294,7 +294,7 @@ RSpec.describe Notification, type: :model do
       end
 
       it "returns true for scheduled notification that is ready" do
-        notification = create(:notification, :pending, scheduled_for: 1.minute.ago)
+        notification = create(:notification, :pending, :ready_scheduled)
         expect(notification.should_send?).to be true
       end
 
