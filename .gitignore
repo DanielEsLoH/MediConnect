@@ -1,6 +1,9 @@
 /.claude
 MediConnect_Project_Plan_EN.pdf
 
+# Ruby LSP (Language Server Protocol)
+.ruby-lsp/
+
 # Rails
 server/*/log/*
 server/*/tmp/*

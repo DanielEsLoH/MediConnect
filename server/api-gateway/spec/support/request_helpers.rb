@@ -8,13 +8,14 @@ module RequestHelpers
   # @param role [String] the user's role
   # @return [String] the JWT token
   def generate_token(user_id: 1, email: "test@example.com", role: "patient")
-    JsonWebToken.encode(
+    payload = {
       user_id: user_id,
       email: email,
       role: role,
       first_name: "Test",
       last_name: "User"
-    )
+    }
+    JsonWebToken.encode(payload)
   end
 
   # Generates a valid refresh token for testing
@@ -22,7 +23,7 @@ module RequestHelpers
   # @param user_id [Integer] the user ID to encode
   # @return [String] the refresh token
   def generate_refresh_token(user_id: 1)
-    JsonWebToken.encode_refresh_token(user_id: user_id)
+    JsonWebToken.encode_refresh_token({ user_id: user_id })
   end
 
   # Sets the Authorization header with a valid token

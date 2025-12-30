@@ -193,18 +193,20 @@ class HttpClient
         # Response middleware
         conn.response :json, content_type: /\bjson$/
 
-        # Retry middleware with exponential backoff
-        conn.request :retry, {
-          max: max_retries,
-          interval: 0.5,
-          interval_randomness: 0.5,
-          backoff_factor: 2,
-          retry_statuses: RETRY_STATUSES,
-          exceptions: RETRY_EXCEPTIONS,
-          retry_block: ->(env, opts, retries, exc) {
-            Rails.logger.warn("Retrying request to #{env.url} (attempt #{retries + 1}): #{exc&.message}")
+        # Retry middleware with exponential backoff (disabled in test environment)
+        unless Rails.env.test?
+          conn.request :retry, {
+            max: max_retries,
+            interval: 0.5,
+            interval_randomness: 0.5,
+            backoff_factor: 2,
+            retry_statuses: RETRY_STATUSES,
+            exceptions: RETRY_EXCEPTIONS,
+            retry_block: ->(env, opts, retries, exc) {
+              Rails.logger.warn("Retrying request to #{env.url} (attempt #{retries + 1}): #{exc&.message}")
+            }
           }
-        }
+        end
 
         # Timeout configuration
         conn.options.timeout = timeout

@@ -28,7 +28,7 @@ module Api
       # Shows a specific user
       # Users can only view their own profile unless admin
       def show
-        authorize_user_access!
+        return unless authorize_user_access!
 
         proxy_request(
           service: :users,
@@ -53,7 +53,7 @@ module Api
       # Updates a user
       # Users can only update their own profile unless admin
       def update
-        authorize_user_access!
+        return unless authorize_user_access!
 
         proxy_request(
           service: :users,
@@ -113,14 +113,16 @@ module Api
       end
 
       # Ensures user can only access their own data unless admin
+      # @return [Boolean] true if authorized, false if rendered error
       def authorize_user_access!
-        return if current_user_has_role?(:admin)
-        return if params[:id].to_s == current_user_id.to_s
+        return true if current_user_has_role?(:admin)
+        return true if params[:id].to_s == current_user_id.to_s
 
         render json: ErrorResponse.forbidden(
           "You can only access your own user data",
           request_id: request_id
         ), status: :forbidden
+        false
       end
     end
   end

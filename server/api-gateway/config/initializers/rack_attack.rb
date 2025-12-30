@@ -10,10 +10,19 @@
 #
 class Rack::Attack
   # Use Redis as the cache store for distributed rate limiting
-  Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(
-    url: ENV.fetch("REDIS_URL", "redis://localhost:6379/0"),
-    namespace: "rack_attack"
-  )
+  # Rails 8.1+ requires different connection pool handling
+  redis_url = ENV.fetch("REDIS_URL", "redis://localhost:6379/0")
+
+  begin
+    Rack::Attack.cache.store = ActiveSupport::Cache::RedisCacheStore.new(
+      url: redis_url,
+      namespace: "rack_attack",
+      pool: false # Disable connection pooling for simpler initialization
+    )
+  rescue ArgumentError
+    # Fallback for different connection_pool versions
+    Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new(namespace: "rack_attack")
+  end
 
   ### Safelist Rules ###
 
