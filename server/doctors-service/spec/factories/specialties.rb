@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :specialty do
-    name { Faker::Medical::Medicine.medical_specialty }
+    sequence(:name) { |n| "Specialty #{n}" }
     description { Faker::Lorem.paragraph }
   end
 end

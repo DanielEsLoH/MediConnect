@@ -2,12 +2,12 @@
 
 FactoryBot.define do
   factory :clinic do
-    name { Faker::Company.name + " Medical Center" }
+    sequence(:name) { |n| "Medical Center #{n}" }
     address { Faker::Address.street_address }
     city { Faker::Address.city }
     state { Faker::Address.state_abbr }
     zip_code { Faker::Address.zip_code }
-    phone_number { Faker::PhoneNumber.phone_number }
+    phone_number { "+1-555-#{rand(100..999)}-#{rand(1000..9999)}" }
     operating_hours do
       {
         monday: "09:00-17:00",

@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :review do
     association :doctor
-    user_id { rand(1..1000) }
+    user_id { SecureRandom.uuid }
     rating { rand(1..5) }
     comment { Faker::Lorem.paragraph }
     verified { false }

@@ -142,7 +142,6 @@ module Internal
         phone_number: doctor.phone_number,
         bio: doctor.bio,
         years_of_experience: doctor.years_of_experience,
-        education: doctor.education,
         languages: doctor.languages,
         consultation_fee: doctor.consultation_fee,
         profile_picture_url: doctor.profile_picture_url,

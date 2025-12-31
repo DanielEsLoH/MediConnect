@@ -47,6 +47,11 @@ SimpleCov.start "rails" do
   add_filter "/public/"
   add_filter "/storage/"
 
+  # Exclude Rails boilerplate files that are not customized
+  # These are standard Rails-generated files with no custom logic
+  add_filter "app/jobs/application_job.rb"
+  add_filter "app/mailers/application_mailer.rb"
+
   # Track all files in app directory, even if not loaded during tests
   track_files "{app}/**/*.rb"
 
