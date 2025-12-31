@@ -4,7 +4,8 @@ require "rails_helper"
 
 RSpec.describe AuthenticationService do
   describe ".authenticate" do
-    let(:user) { create(:user, email: "test@example.com", password: "Password123") }
+    # Use let! to eagerly create the user before each test
+    let!(:user) { create(:user, email: "test@example.com", password: "Password123") }
 
     context "with valid credentials" do
       it "returns the user" do

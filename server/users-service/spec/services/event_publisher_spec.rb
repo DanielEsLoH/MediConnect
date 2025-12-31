@@ -9,12 +9,24 @@ RSpec.describe EventPublisher do
     let(:exchange) { instance_double(Bunny::Exchange) }
 
     before do
+      # Reset the memoized rabbit connection to ensure fresh mocks each test
+      EventPublisher.instance_variable_set(:@rabbit_connection, nil)
+
+      # Stub Rails.env to production so EventPublisher actually executes
+      # (it returns early in test environment)
+      allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
+
       allow(Bunny).to receive(:new).and_return(connection)
       allow(connection).to receive(:start).and_return(connection)
       allow(connection).to receive(:create_channel).and_return(channel)
       allow(channel).to receive(:topic).and_return(exchange)
       allow(channel).to receive(:close)
       allow(exchange).to receive(:publish)
+    end
+
+    after do
+      # Clean up memoized connection after each test
+      EventPublisher.instance_variable_set(:@rabbit_connection, nil)
     end
 
     it "publishes message to RabbitMQ exchange" do

@@ -9,13 +9,13 @@ FactoryBot.define do
     last_name { Faker::Name.last_name }
     date_of_birth { Faker::Date.birthday(min_age: 18, max_age: 90) }
     gender { %w[male female other].sample }
-    phone_number { Faker::PhoneNumber.phone_number }
+    phone_number { "+1 #{Faker::Number.number(digits: 3)}-#{Faker::Number.number(digits: 3)}-#{Faker::Number.number(digits: 4)}" }
     address { Faker::Address.street_address }
     city { Faker::Address.city }
     state { Faker::Address.state_abbr }
     zip_code { Faker::Address.zip_code }
     emergency_contact_name { Faker::Name.name }
-    emergency_contact_phone { Faker::PhoneNumber.phone_number }
+    emergency_contact_phone { "+1 #{Faker::Number.number(digits: 3)}-#{Faker::Number.number(digits: 3)}-#{Faker::Number.number(digits: 4)}" }
     active { true }
 
     trait :inactive do

@@ -60,7 +60,4 @@ if defined?(Bullet)
     Bullet.bullet_logger = true
   end
 
-  # Stacktrace configuration - show 3 lines for context
-  # This helps identify the source of N+1 queries
-  Bullet.stacktrace_level = 3
 end

@@ -12,17 +12,17 @@ FactoryBot.define do
 
     trait :diagnosis do
       record_type { :diagnosis }
-      title { "Diagnosed with #{Faker::Medical::Medicine.disease}" }
+      title { "Diagnosed with #{Faker::Lorem.word.capitalize} Syndrome" }
     end
 
     trait :prescription do
       record_type { :prescription }
-      title { "Prescribed #{Faker::Medical::Medicine.drug_name}" }
+      title { "Prescribed #{Faker::Lorem.word.capitalize}mycin 500mg" }
     end
 
     trait :lab_result do
       record_type { :lab_result }
-      title { "Lab results for #{Faker::Medical::Medicine.test_name}" }
+      title { "Lab results for #{Faker::Lorem.word.capitalize} Panel" }
     end
 
     trait :with_attachments do
