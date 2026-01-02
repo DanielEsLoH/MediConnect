@@ -20,7 +20,7 @@ if defined?(Bullet)
   # Counter cache detection
   Bullet.counter_cache_enable = true
 
-  # Include 3 lines of stacktrace for debugging
+  # Stacktrace configuration for filtering
   Bullet.stacktrace_includes = []
   Bullet.stacktrace_excludes = []
 
@@ -59,8 +59,4 @@ if defined?(Bullet)
     # Enable Bullet's own logger for detailed tracking
     Bullet.bullet_logger = true
   end
-
-  # Stacktrace configuration - show 3 lines for context
-  # This helps identify the source of N+1 queries
-  Bullet.stacktrace_level = 3
 end

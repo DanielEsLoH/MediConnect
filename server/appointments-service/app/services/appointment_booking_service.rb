@@ -94,7 +94,7 @@ class AppointmentBookingService
 
     # Get consultation fee
     @consultation_fee = @doctor_data["consultation_fee"]
-  rescue HttpClient::ServiceUnavailableError, HttpClient::CircuitOpenError => e
+  rescue HttpClient::ServiceUnavailable, HttpClient::CircuitOpen => e
     @errors << "Unable to verify doctor: #{e.message}"
   end
 

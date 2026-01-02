@@ -41,7 +41,13 @@ FactoryBot.define do
 
     trait :no_show do
       status { "no_show" }
+      # Use a future date by default, will be updated after creation if needed
       appointment_date { 2.days.ago.to_date }
+
+      # Skip validation for past dates in test data
+      to_create do |instance|
+        instance.save(validate: false)
+      end
     end
 
     trait :video_consultation do
@@ -56,6 +62,11 @@ FactoryBot.define do
       appointment_date { 7.days.ago.to_date }
       start_time { Time.parse("14:00:00") }
       end_time { Time.parse("14:30:00") }
+
+      # Skip validation for past dates in test data
+      to_create do |instance|
+        instance.save(validate: false)
+      end
     end
 
     trait :upcoming_appointment do
@@ -72,7 +83,11 @@ FactoryBot.define do
 
     trait :expired_pending do
       status { "pending" }
-      created_at { 45.minutes.ago }
+
+      # Use after_create to update the created_at timestamp
+      after(:create) do |appointment|
+        appointment.update_column(:created_at, 45.minutes.ago)
+      end
     end
 
     trait :long_appointment do

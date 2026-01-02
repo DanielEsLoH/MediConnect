@@ -99,8 +99,8 @@ RSpec.describe "Api::V1::Appointments", type: :request do
     end
 
     before do
-      allow(HttpClient).to receive(:get).with("http://localhost:3001/api/v1/users/#{user_id}").and_return({ "id" => user_id })
-      allow(HttpClient).to receive(:get).with("http://localhost:3002/api/v1/doctors/#{doctor_id}").and_return(doctor_data)
+      allow(HttpClient).to receive(:get).with(:users, "/api/v1/users/#{user_id}").and_return({ "id" => user_id })
+      allow(HttpClient).to receive(:get).with(:doctors, "/api/v1/doctors/#{doctor_id}").and_return(doctor_data)
     end
 
     it "creates a new appointment" do

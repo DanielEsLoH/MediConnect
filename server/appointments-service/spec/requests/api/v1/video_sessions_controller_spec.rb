@@ -67,7 +67,8 @@ RSpec.describe "Api::V1::VideoSessions", type: :request do
   end
 
   describe "POST /api/v1/video_sessions/:id/start" do
-    let(:video_session) { create(:video_session) }
+    let(:confirmed_appointment) { create(:appointment, :confirmed, :video_consultation) }
+    let(:video_session) { create(:video_session, appointment: confirmed_appointment) }
 
     it "starts video session" do
       post "/api/v1/video_sessions/#{video_session.id}/start"

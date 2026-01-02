@@ -8,14 +8,35 @@ RSpec.describe VideoSession, type: :model do
   end
 
   describe "validations" do
-    subject { build(:video_session) }
+    # Need to create a proper subject with an appointment for shoulda-matchers
+    subject { create(:video_session) }
 
-    it { should validate_presence_of(:appointment_id) }
     it { should validate_presence_of(:room_name) }
     it { should validate_presence_of(:provider) }
     it { should validate_presence_of(:status) }
-    it { should validate_uniqueness_of(:appointment_id) }
-    it { should validate_uniqueness_of(:room_name) }
+
+    # Test uniqueness manually due to UUID case handling in PostgreSQL
+    describe "uniqueness validations" do
+      it "validates uniqueness of appointment_id" do
+        existing = create(:video_session)
+        duplicate = build(:video_session, appointment_id: existing.appointment_id)
+        expect(duplicate).not_to be_valid
+        expect(duplicate.errors[:appointment_id]).to include("has already been taken")
+      end
+
+      it "validates uniqueness of room_name" do
+        existing = create(:video_session)
+        duplicate = build(:video_session, room_name: existing.room_name)
+        expect(duplicate).not_to be_valid
+        expect(duplicate.errors[:room_name]).to include("has already been taken")
+      end
+    end
+
+    it "requires an appointment" do
+      video_session = VideoSession.new(room_name: "test-room", provider: "daily", status: "created")
+      expect(video_session).not_to be_valid
+      expect(video_session.errors[:appointment]).to include("must exist")
+    end
   end
 
   describe "enums" do
