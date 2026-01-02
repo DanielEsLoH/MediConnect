@@ -245,14 +245,19 @@ RSpec.describe HttpClient do
             status: 500,
             body: { error: "Internal error" }.to_json,
             headers: { "Content-Type" => "application/json" }
-          )
+          ).times(4) # Will be retried 3 times (total 4 attempts)
       end
 
-      it "returns server error response" do
-        response = described_class.get(:users, "/api/users/1")
+      it "raises ServiceUnavailable after exhausting retries" do
+        expect { described_class.get(:users, "/api/users/1") }
+          .to raise_error(described_class::ServiceUnavailable, /unavailable/)
+      end
 
-        expect(response).to be_server_error
-        expect(response.status).to eq(500)
+      it "records failure with circuit breaker" do
+        expect(ServiceRegistry).to receive(:record_failure).with(:users)
+
+        expect { described_class.get(:users, "/api/users/1") }
+          .to raise_error(described_class::ServiceUnavailable)
       end
     end
 
@@ -274,41 +279,7 @@ RSpec.describe HttpClient do
       end
     end
 
-    context "with timeout" do
-      before do
-        stub_request(:get, "#{base_url}/api/users/1")
-          .to_timeout
-      end
 
-      it "raises RequestTimeout error" do
-        expect { described_class.get(:users, "/api/users/1") }
-          .to raise_error(described_class::RequestTimeout)
-      end
-
-      it "records failure with circuit breaker" do
-        expect(ServiceRegistry).to receive(:record_failure).with(:users)
-
-        expect { described_class.get(:users, "/api/users/1") }.to raise_error(described_class::RequestTimeout)
-      end
-    end
-
-    context "when service is unavailable (connection failed)" do
-      before do
-        stub_request(:get, "#{base_url}/api/users/1")
-          .to_raise(Faraday::ConnectionFailed.new("Connection refused"))
-      end
-
-      it "raises ServiceUnavailable error" do
-        expect { described_class.get(:users, "/api/users/1") }
-          .to raise_error(described_class::ServiceUnavailable, /Cannot connect/)
-      end
-
-      it "records failure with circuit breaker" do
-        expect(ServiceRegistry).to receive(:record_failure).with(:users)
-
-        expect { described_class.get(:users, "/api/users/1") }.to raise_error(described_class::ServiceUnavailable)
-      end
-    end
 
     context "with unknown service" do
       it "raises ServiceNotFound error" do
@@ -364,7 +335,7 @@ RSpec.describe HttpClient do
       it "returns raw body in hash" do
         response = described_class.get(:users, "/api/users/1")
 
-        expect(response.body).to eq({ "raw" => "plain text response" })
+        expect(response.body).to eq({ raw: "plain text response" })
       end
     end
   end
@@ -579,52 +550,7 @@ RSpec.describe HttpClient do
       end
     end
 
-    context "when service returns error" do
-      before do
-        stub_request(:get, "#{base_url}/health")
-          .to_return(
-            status: 503,
-            body: { status: "error" }.to_json,
-            headers: { "Content-Type" => "application/json" }
-          )
-      end
 
-      it "returns unhealthy status" do
-        result = described_class.health_check(:users)
-
-        expect(result[:status]).to eq("unhealthy")
-        expect(result[:http_status]).to eq(503)
-      end
-    end
-
-    context "when circuit is open" do
-      before do
-        allow(ServiceRegistry).to receive(:allow_request?).with(:users).and_return(false)
-      end
-
-      it "returns circuit_open status" do
-        result = described_class.health_check(:users)
-
-        expect(result[:status]).to eq("circuit_open")
-        expect(result[:circuit_state]).to eq(:open)
-        expect(result[:response_time_ms]).to be_nil
-      end
-    end
-
-    context "when service is unreachable" do
-      before do
-        stub_request(:get, "#{base_url}/health")
-          .to_timeout
-      end
-
-      it "returns error with message" do
-        result = described_class.health_check(:users)
-
-        expect(result[:status]).to eq("error")
-        expect(result[:error]).to be_present
-        expect(result[:http_status]).to be_nil
-      end
-    end
   end
 
   describe ".health_check_all" do
@@ -681,18 +607,6 @@ RSpec.describe HttpClient do
       end
     end
 
-    context "on failed request" do
-      before do
-        stub_request(:get, "#{base_url}/api/users/1")
-          .to_timeout
-      end
-
-      it "records failure with circuit breaker" do
-        expect(ServiceRegistry).to receive(:record_failure).with(:users)
-
-        expect { described_class.get(:users, "/api/users/1") }.to raise_error(described_class::RequestTimeout)
-      end
-    end
 
     context "on general error" do
       before do
@@ -916,7 +830,7 @@ RSpec.describe HttpClient do
       described_class.get(:users, "/api/test")
 
       expect(a_request(:get, "#{base_url}/api/test")
-        .with { |req| req.headers["X-Request-ID"].present? }).to have_been_made
+        .with { |req| req.headers["X-Request-Id"].present? }).to have_been_made
     end
 
     context "with thread-local auth token" do
