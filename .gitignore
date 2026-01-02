@@ -33,3 +33,5 @@ server/*/.env.*
 # OS
 .DS_Store
 Thumbs.db
+# RSpec failure tracking
+spec/examples.txt
