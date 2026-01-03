@@ -32,7 +32,7 @@ class Doctor < ApplicationRecord
   # Callbacks
   after_create :publish_doctor_created_event
   after_update :publish_doctor_updated_event
-  before_save :normalize_email
+  before_validation :normalize_email
 
   # Scopes
   scope :active, -> { where(active: true) }
@@ -54,7 +54,7 @@ class Doctor < ApplicationRecord
   end
 
   def average_rating
-    reviews.average(:rating)&.round(2) || 0.0
+    reviews.average(:rating)&.to_f&.round(2) || 0.0
   end
 
   def total_reviews

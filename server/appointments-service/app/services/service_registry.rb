@@ -14,6 +14,10 @@
 #   ServiceRegistry.healthy?(:doctors)
 #   # => true
 #
+# @example Test mode (bypasses Redis)
+#   ServiceRegistry.test_mode = true
+#   ServiceRegistry.test_circuit_state = :open  # Simulate open circuit
+#
 class ServiceRegistry
   class ServiceNotFound < StandardError; end
   class CircuitOpen < StandardError; end
@@ -21,6 +25,23 @@ class ServiceRegistry
   CIRCUIT_CLOSED = :closed
   CIRCUIT_OPEN = :open
   CIRCUIT_HALF_OPEN = :half_open
+
+  # Test mode configuration - allows tests to bypass Redis entirely
+  class << self
+    attr_accessor :test_mode, :test_circuit_state, :test_allow_requests
+
+    def reset_test_mode!
+      @test_mode = false
+      @test_circuit_state = CIRCUIT_CLOSED
+      @test_allow_requests = true
+      @redis = nil
+    end
+  end
+
+  # Initialize test mode settings
+  @test_mode = false
+  @test_circuit_state = CIRCUIT_CLOSED
+  @test_allow_requests = true
 
   FAILURE_THRESHOLD = ENV.fetch("CIRCUIT_FAILURE_THRESHOLD", 5).to_i
   SUCCESS_THRESHOLD = ENV.fetch("CIRCUIT_SUCCESS_THRESHOLD", 2).to_i
@@ -102,6 +123,9 @@ class ServiceRegistry
     end
 
     def allow_request?(service_name)
+      # In test mode, use the test configuration
+      return @test_allow_requests if @test_mode
+
       state = circuit_state(service_name)
 
       case state
@@ -122,6 +146,8 @@ class ServiceRegistry
     end
 
     def record_success(service_name)
+      # In test mode, skip Redis operations
+      return if @test_mode
       return unless redis_available?
 
       state = circuit_state(service_name)
@@ -139,6 +165,8 @@ class ServiceRegistry
     end
 
     def record_failure(service_name)
+      # In test mode, skip Redis operations
+      return if @test_mode
       return unless redis_available?
 
       state = circuit_state(service_name)
@@ -157,6 +185,8 @@ class ServiceRegistry
     end
 
     def circuit_state(service_name)
+      # In test mode, return the test circuit state
+      return @test_circuit_state if @test_mode
       return CIRCUIT_CLOSED unless redis_available?
 
       state = redis.get(circuit_state_key(service_name))

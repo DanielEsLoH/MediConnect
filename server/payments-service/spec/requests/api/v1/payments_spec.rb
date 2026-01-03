@@ -353,6 +353,15 @@ RSpec.describe "Api::V1::Payments", type: :request do
         expect(payment.description).to include(appointment_id)
       end
 
+      it "generates generic description when appointment_id is not provided" do
+        params_without_appointment = valid_params.except(:appointment_id)
+
+        post "/api/v1/payments/create-intent", headers: auth_headers, params: params_without_appointment.to_json
+
+        payment = Payment.last
+        expect(payment.description).to eq("MediConnect - Payment")
+      end
+
       it "uses provided description" do
         params_with_description = valid_params.merge(description: "Custom description")
 
@@ -785,6 +794,32 @@ RSpec.describe "Api::V1::Payments", type: :request do
         payment.reload
         expect(payment.status).to eq("failed")
         expect(payment.failure_reason).to eq("Card declined")
+      end
+
+      it "handles payment not found for failed webhook" do
+        mock_event_not_found = double(
+          "Stripe::Event",
+          id: "evt_test123",
+          type: "payment_intent.payment_failed",
+          data: double(object: double(
+            id: "pi_nonexistent_failure",
+            last_payment_error: double(message: "Card declined")
+          ))
+        )
+        allow(StripeService).to receive(:construct_webhook_event).and_return(mock_event_not_found)
+        allow(Rails.logger).to receive(:warn)
+
+        post "/api/v1/payments/webhook",
+             headers: headers.merge("Stripe-Signature" => webhook_signature),
+             params: webhook_payload
+
+        expect(response).to have_http_status(:ok)
+        expect(Rails.logger).to have_received(:warn).with(
+          hash_including(
+            event: "webhook_payment_not_found",
+            payment_intent_id: "pi_nonexistent_failure"
+          )
+        )
       end
     end
 

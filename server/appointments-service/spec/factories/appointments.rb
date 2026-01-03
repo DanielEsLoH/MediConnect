@@ -1,11 +1,18 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
+  sequence :appointment_day_offset do |n|
+    n  # Each appointment gets a unique day offset
+  end
+
   factory :appointment do
     user_id { SecureRandom.uuid }
     doctor_id { SecureRandom.uuid }
     clinic_id { SecureRandom.uuid }
-    appointment_date { 7.days.from_now.to_date }
+    transient do
+      day_offset { generate(:appointment_day_offset) }
+    end
+    appointment_date { (7 + day_offset).days.from_now.to_date }
     start_time { Time.parse("10:00:00") }
     end_time { Time.parse("10:30:00") }
     duration_minutes { 30 }

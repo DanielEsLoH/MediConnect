@@ -169,7 +169,8 @@ RSpec.describe Clinic, type: :model do
 
     context "when clinic has no doctors" do
       it "allows deletion" do
-        expect { clinic.destroy }.to change(Clinic, :count).by(-1)
+        empty_clinic = create(:clinic)
+        expect { empty_clinic.destroy }.to change(Clinic, :count).by(-1)
       end
     end
   end

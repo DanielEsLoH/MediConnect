@@ -18,7 +18,7 @@ class AvailabilityService
     available_slots(date).any?
   end
 
-  def next_available_date(from_date = Date.today, limit_days = 30)
+  def next_available_date(from_date = Date.today, limit_days: 30)
     (from_date..from_date + limit_days.days).find do |date|
       available_on_date?(date)
     end

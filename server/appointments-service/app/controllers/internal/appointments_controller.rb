@@ -33,9 +33,15 @@ module Internal
     # @param appointment_ids [Array<String>] Array of appointment UUIDs
     # @return [JSON] Array of appointment data
     def batch
-      appointment_ids = params.require(:appointment_ids)
+      appointment_ids = params[:appointment_ids]
 
-      unless appointment_ids.is_a?(Array) && appointment_ids.length <= 100
+      unless appointment_ids.is_a?(Array)
+        return render json: {
+          error: "appointment_ids must be an array"
+        }, status: :bad_request
+      end
+
+      if appointment_ids.length > 100
         return render json: {
           error: "appointment_ids must be an array with max 100 items"
         }, status: :bad_request

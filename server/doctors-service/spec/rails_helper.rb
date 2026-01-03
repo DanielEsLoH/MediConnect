@@ -5,6 +5,8 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require "rspec/rails"
+require "shoulda/matchers"
+require "database_cleaner/active_record"
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
@@ -35,6 +37,12 @@ RSpec.configure do |config|
 
   config.before do
     DatabaseCleaner.start
+  end
+
+  config.before(:each) do
+    # Reset memoized connections to prevent test double leaks
+    EventPublisher.instance_variable_set(:@rabbit_connection, nil)
+    ServiceRegistry.instance_variable_set(:@redis, nil)
   end
 
   config.after do

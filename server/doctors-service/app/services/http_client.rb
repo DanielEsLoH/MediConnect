@@ -197,15 +197,24 @@ class HttpClient
         headers: response.headers.to_h,
         duration_ms: duration_ms
       )
-    rescue Faraday::TimeoutError => e
+    rescue Faraday::TimeoutError, Timeout::Error => e
       ServiceRegistry.record_failure(service)
       log_error(service, method, path, "Timeout", request_id)
       raise RequestTimeout, "Request to #{service}#{path} timed out: #{e.message}"
     rescue Faraday::ConnectionFailed => e
+      # Check if the underlying cause is a timeout
+      if e.message.include?("execution expired") || e.message.include?("timed out")
+        ServiceRegistry.record_failure(service)
+        log_error(service, method, path, "Timeout", request_id)
+        raise RequestTimeout, "Request to #{service}#{path} timed out: #{e.message}"
+      end
       ServiceRegistry.record_failure(service)
       log_error(service, method, path, "Connection failed", request_id)
       raise ServiceUnavailable, "Cannot connect to #{service}: #{e.message}"
     rescue ServiceRegistry::ServiceNotFound
+      raise
+    rescue CircuitOpen
+      # Re-raise CircuitOpen without wrapping so health_check can handle it
       raise
     rescue StandardError => e
       ServiceRegistry.record_failure(service)
@@ -227,9 +236,9 @@ class HttpClient
           backoff_factor: 2,
           retry_statuses: RETRY_STATUSES,
           exceptions: RETRY_EXCEPTIONS,
-          retry_block: ->(env, _opts, retries, exc) {
+          retry_block: ->(env:, options:, retry_count:, exception:, will_retry_in:) {
             Rails.logger.warn(
-              "[HttpClient] Retry #{retries}/#{DEFAULT_MAX_RETRIES} for #{env.method.upcase} #{env.url}: #{exc&.message}"
+              "[HttpClient] Retry #{retry_count}/#{DEFAULT_MAX_RETRIES} for #{env.method.upcase} #{env.url}: #{exception&.message}"
             )
           }
         }

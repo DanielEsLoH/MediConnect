@@ -234,7 +234,7 @@ RSpec.describe Doctor, type: :model do
   end
 
   describe "callbacks" do
-    describe "before_save" do
+    describe "before_validation" do
       describe "#normalize_email" do
         it "downcases email" do
           doctor = create(:doctor, email: "Doctor@Example.COM")

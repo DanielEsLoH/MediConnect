@@ -16,9 +16,13 @@ RSpec.describe EventConsumer do
   describe ".start" do
     context "in test environment" do
       it "does not start the consumer" do
+        # Verify we're in test environment
         expect(Rails.env.test?).to be true
-        # Should not raise error, just exit early
-        expect { described_class.start }.not_to raise_error
+
+        # The start method should return nil and not start any threads
+        result = described_class.start
+
+        expect(result).to be_nil
       end
     end
   end

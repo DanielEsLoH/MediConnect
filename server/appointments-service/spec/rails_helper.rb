@@ -2,6 +2,8 @@
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
+require 'shoulda/matchers'
+require 'database_cleaner/active_record'
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 # Uncomment the line below in case you have `--require rails_helper` in the `.rspec` file
@@ -88,6 +90,12 @@ RSpec.configure do |config|
 
   config.before do
     DatabaseCleaner.start
+  end
+
+  config.before(:each) do
+    # Reset memoized connections to prevent test double leaks
+    EventPublisher.instance_variable_set(:@rabbit_connection, nil) if defined?(EventPublisher)
+    ServiceRegistry.instance_variable_set(:@redis, nil) if defined?(ServiceRegistry)
   end
 
   config.after do

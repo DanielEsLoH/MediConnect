@@ -3,30 +3,38 @@
 require "rails_helper"
 
 RSpec.describe EventPublisher do
-  let(:connection_mock) { instance_double(Bunny::Session) }
-  let(:channel_mock) { instance_double(Bunny::Channel) }
-  let(:exchange_mock) { instance_double(Bunny::Exchange) }
-
-  before do
+  before(:each) do
+    # Reset the memoized connection before each test to prevent leaks
+    EventPublisher.instance_variable_set(:@rabbit_connection, nil)
     allow(Rails.logger).to receive(:info)
   end
 
   describe ".publish" do
     context "in production environment" do
-      before do
+      before(:each) do
+        # Recreate Bunny mocks for each test to prevent instance double leaks
+        connection_instance = instance_double(Bunny::Session)
+        channel_instance = instance_double(Bunny::Channel)
+        exchange_instance = instance_double(Bunny::Exchange)
+
         allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
-        allow(Bunny).to receive(:new).and_return(connection_mock)
-        allow(connection_mock).to receive(:start).and_return(connection_mock)
-        allow(connection_mock).to receive(:create_channel).and_return(channel_mock)
-        allow(channel_mock).to receive(:topic).and_return(exchange_mock)
-        allow(channel_mock).to receive(:close)
-        allow(exchange_mock).to receive(:publish)
+        allow(Bunny).to receive(:new).and_return(connection_instance)
+        allow(connection_instance).to receive(:start).and_return(connection_instance)
+        allow(connection_instance).to receive(:create_channel).and_return(channel_instance)
+        allow(channel_instance).to receive(:topic).and_return(exchange_instance)
+        allow(channel_instance).to receive(:close)
+        allow(exchange_instance).to receive(:publish)
+
+        # Store references for test assertions
+        @connection_mock = connection_instance
+        @channel_mock = channel_instance
+        @exchange_mock = exchange_instance
       end
 
       it "publishes event to RabbitMQ" do
         EventPublisher.publish("doctor.created", { doctor_id: "123" })
 
-        expect(exchange_mock).to have_received(:publish).with(
+        expect(@exchange_mock).to have_received(:publish).with(
           anything,
           hash_including(
             routing_key: "doctor.created",
@@ -39,7 +47,7 @@ RSpec.describe EventPublisher do
       it "includes event_type in message" do
         EventPublisher.publish("doctor.created", { doctor_id: "123" })
 
-        expect(exchange_mock).to have_received(:publish) do |message, _options|
+        expect(@exchange_mock).to have_received(:publish) do |message, _options|
           parsed = JSON.parse(message)
           expect(parsed["event_type"]).to eq("doctor.created")
         end
@@ -48,7 +56,7 @@ RSpec.describe EventPublisher do
       it "includes payload in message" do
         EventPublisher.publish("doctor.created", { doctor_id: "123", name: "Dr. Smith" })
 
-        expect(exchange_mock).to have_received(:publish) do |message, _options|
+        expect(@exchange_mock).to have_received(:publish) do |message, _options|
           parsed = JSON.parse(message)
           expect(parsed["payload"]["doctor_id"]).to eq("123")
           expect(parsed["payload"]["name"]).to eq("Dr. Smith")
@@ -58,7 +66,7 @@ RSpec.describe EventPublisher do
       it "includes service name in message" do
         EventPublisher.publish("doctor.created", { doctor_id: "123" })
 
-        expect(exchange_mock).to have_received(:publish) do |message, _options|
+        expect(@exchange_mock).to have_received(:publish) do |message, _options|
           parsed = JSON.parse(message)
           expect(parsed["service"]).to eq("doctors-service")
         end
@@ -67,7 +75,7 @@ RSpec.describe EventPublisher do
       it "includes timestamp in message" do
         EventPublisher.publish("doctor.created", { doctor_id: "123" })
 
-        expect(exchange_mock).to have_received(:publish) do |message, _options|
+        expect(@exchange_mock).to have_received(:publish) do |message, _options|
           parsed = JSON.parse(message)
           expect(parsed["timestamp"]).to be_present
           expect { Time.parse(parsed["timestamp"]) }.not_to raise_error
@@ -79,7 +87,7 @@ RSpec.describe EventPublisher do
 
         EventPublisher.publish("doctor.created", { doctor_id: "123" })
 
-        expect(exchange_mock).to have_received(:publish) do |message, _options|
+        expect(@exchange_mock).to have_received(:publish) do |message, _options|
           parsed = JSON.parse(message)
           expect(parsed["request_id"]).to eq("request-123")
         end
@@ -96,31 +104,37 @@ RSpec.describe EventPublisher do
       it "closes the channel after publishing" do
         EventPublisher.publish("doctor.created", { doctor_id: "123" })
 
-        expect(channel_mock).to have_received(:close)
+        expect(@channel_mock).to have_received(:close)
       end
 
       it "uses durable topic exchange" do
         EventPublisher.publish("doctor.created", { doctor_id: "123" })
 
-        expect(channel_mock).to have_received(:topic).with("mediconnect.events", durable: true)
+        expect(@channel_mock).to have_received(:topic).with("mediconnect.events", durable: true)
       end
     end
 
     context "in development environment" do
-      before do
+      before(:each) do
+        connection_instance = instance_double(Bunny::Session)
+        channel_instance = instance_double(Bunny::Channel)
+        exchange_instance = instance_double(Bunny::Exchange)
+
         allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("development"))
-        allow(Bunny).to receive(:new).and_return(connection_mock)
-        allow(connection_mock).to receive(:start).and_return(connection_mock)
-        allow(connection_mock).to receive(:create_channel).and_return(channel_mock)
-        allow(channel_mock).to receive(:topic).and_return(exchange_mock)
-        allow(channel_mock).to receive(:close)
-        allow(exchange_mock).to receive(:publish)
+        allow(Bunny).to receive(:new).and_return(connection_instance)
+        allow(connection_instance).to receive(:start).and_return(connection_instance)
+        allow(connection_instance).to receive(:create_channel).and_return(channel_instance)
+        allow(channel_instance).to receive(:topic).and_return(exchange_instance)
+        allow(channel_instance).to receive(:close)
+        allow(exchange_instance).to receive(:publish)
+
+        @exchange_mock = exchange_instance
       end
 
       it "publishes events" do
         EventPublisher.publish("doctor.created", { doctor_id: "123" })
 
-        expect(exchange_mock).to have_received(:publish)
+        expect(@exchange_mock).to have_received(:publish)
       end
     end
 
@@ -137,30 +151,38 @@ RSpec.describe EventPublisher do
     end
 
     context "when channel close raises an error" do
-      before do
+      before(:each) do
+        connection_instance = instance_double(Bunny::Session)
+        channel_instance = instance_double(Bunny::Channel)
+        exchange_instance = instance_double(Bunny::Exchange)
+
         allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
-        allow(Bunny).to receive(:new).and_return(connection_mock)
-        allow(connection_mock).to receive(:start).and_return(connection_mock)
-        allow(connection_mock).to receive(:create_channel).and_return(channel_mock)
-        allow(channel_mock).to receive(:topic).and_return(exchange_mock)
-        allow(channel_mock).to receive(:close).and_raise(StandardError.new("Close failed"))
-        allow(exchange_mock).to receive(:publish)
+        allow(Bunny).to receive(:new).and_return(connection_instance)
+        allow(connection_instance).to receive(:start).and_return(connection_instance)
+        allow(connection_instance).to receive(:create_channel).and_return(channel_instance)
+        allow(channel_instance).to receive(:topic).and_return(exchange_instance)
+        allow(channel_instance).to receive(:close).and_raise(StandardError.new("Close failed"))
+        allow(exchange_instance).to receive(:publish)
+
+        @channel_mock = channel_instance
       end
 
       it "still ensures channel close is attempted" do
         expect { EventPublisher.publish("doctor.created", { doctor_id: "123" }) }
           .to raise_error(StandardError, "Close failed")
 
-        expect(channel_mock).to have_received(:close)
+        expect(@channel_mock).to have_received(:close)
       end
     end
 
     context "with nil channel" do
-      before do
+      before(:each) do
+        connection_instance = instance_double(Bunny::Session)
+
         allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
-        allow(Bunny).to receive(:new).and_return(connection_mock)
-        allow(connection_mock).to receive(:start).and_return(connection_mock)
-        allow(connection_mock).to receive(:create_channel).and_return(nil)
+        allow(Bunny).to receive(:new).and_return(connection_instance)
+        allow(connection_instance).to receive(:start).and_return(connection_instance)
+        allow(connection_instance).to receive(:create_channel).and_return(nil)
       end
 
       it "handles nil channel gracefully in ensure block" do
@@ -178,6 +200,10 @@ RSpec.describe EventPublisher do
       end
 
       it "uses default connection URL" do
+        connection_instance = instance_double(Bunny::Session)
+        channel_instance = instance_double(Bunny::Channel)
+        exchange_instance = instance_double(Bunny::Exchange)
+
         expect(Bunny).to receive(:new).with(
           "amqp://guest:guest@localhost:5672",
           hash_including(
@@ -185,13 +211,13 @@ RSpec.describe EventPublisher do
             network_recovery_interval: 5,
             recovery_attempts: 10
           )
-        ).and_return(connection_mock)
+        ).and_return(connection_instance)
 
-        allow(connection_mock).to receive(:start).and_return(connection_mock)
-        allow(connection_mock).to receive(:create_channel).and_return(channel_mock)
-        allow(channel_mock).to receive(:topic).and_return(exchange_mock)
-        allow(channel_mock).to receive(:close)
-        allow(exchange_mock).to receive(:publish)
+        allow(connection_instance).to receive(:start).and_return(connection_instance)
+        allow(connection_instance).to receive(:create_channel).and_return(channel_instance)
+        allow(channel_instance).to receive(:topic).and_return(exchange_instance)
+        allow(channel_instance).to receive(:close)
+        allow(exchange_instance).to receive(:publish)
 
         EventPublisher.publish("doctor.created", { doctor_id: "123" })
       end
