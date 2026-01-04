@@ -460,8 +460,8 @@ video_appointments.each do |appointment|
   video_session = VideoSession.find_or_initialize_by(appointment_id: appointment.id)
   video_session.assign_attributes(
     room_name: "mediconnect-#{appointment.id[0..7]}-#{SecureRandom.hex(4)}",
-    session_url: "https://mediconnect.daily.co/mediconnect-#{appointment.id[0..7]}",
-    provider: "daily",
+    session_url: "ws://localhost:7880/mediconnect-#{appointment.id[0..7]}",
+    provider: "livekit",
     status: session_status,
     started_at: appointment.completed? ? appointment.appointment_date.to_time + appointment.start_time.seconds_since_midnight.seconds : nil,
     ended_at: appointment.completed? ? appointment.appointment_date.to_time + appointment.end_time.seconds_since_midnight.seconds : nil,

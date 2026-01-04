@@ -139,7 +139,6 @@ class DoctorLookupService
       cached = Rails.cache.read(cache_key(doctor_id))
       return nil unless cached
 
-      Rails.logger.debug("[DoctorLookupService] Cache hit for doctor #{doctor_id}")
       cached.symbolize_keys
     end
 

@@ -2,7 +2,7 @@
 
 module Api
   module Internal
-    # Base controller for internal service-to-service API endpoints
+  # Base controller for internal service-to-service API endpoints
   # These endpoints are called by other microservices, not external clients
   #
   # Security:
@@ -62,5 +62,5 @@ module Api
       render json: { error: "Parameter missing", details: exception.message }, status: :bad_request
     end
   end
-end
+  end
 end

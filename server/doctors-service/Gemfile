@@ -25,7 +25,6 @@ gem "jwt", "~> 2.7"
 
 # API
 gem "rack-cors"
-gem "jbuilder"
 
 # HTTP client for service-to-service communication
 gem "faraday", "~> 2.9"
@@ -55,8 +54,8 @@ group :development, :test do
   gem "factory_bot_rails", "~> 6.4"
   gem "faker", "~> 3.2"
 
-  # N+1 Query Detection (disabled until Rails 8.1 support)
-  # gem "bullet", "~> 8.0"
+  # N+1 Query Detection
+  gem "bullet", "~> 8.1"
 
   # Linting
   gem "rubocop", require: false

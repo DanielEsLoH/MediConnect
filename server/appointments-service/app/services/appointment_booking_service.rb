@@ -45,8 +45,6 @@ class AppointmentBookingService
   end
 
   def validate_user_exists
-    # url = "#{USERS_SERVICE_URL}/api/v1/users/#{@params[:user_id]}"
-    # response = HttpClient.get(url)
     response = HttpClient.get(:users, "/api/v1/users/#{@params[:user_id]}")
 
     if response.is_a?(Hash) && response[:error]
@@ -59,9 +57,6 @@ class AppointmentBookingService
   end
 
   def validate_doctor_and_clinic
-    # Validate doctor exists
-    # doctor_url = "#{DOCTORS_SERVICE_URL}/api/v1/doctors/#{@params[:doctor_id]}"
-    # doctor_response = HttpClient.get(doctor_url)
     doctor_response = HttpClient.get(:doctors, "/api/v1/doctors/#{@params[:doctor_id]}")
 
     if doctor_response.is_a?(HttpClient::Response)

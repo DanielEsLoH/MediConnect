@@ -135,12 +135,19 @@ services:
       - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
       - JWT_SECRET=development_jwt_secret_change_in_production
       - PORT=3003
+      # LiveKit configuration for video consultations
+      - LIVEKIT_API_KEY=devkey
+      - LIVEKIT_API_SECRET=secret_that_is_at_least_32_characters_long
+      - LIVEKIT_HOST=http://livekit:7880
+      - LIVEKIT_WS_URL=ws://livekit:7880
     depends_on:
       postgres_appointments:
         condition: service_healthy
       redis:
         condition: service_healthy
       rabbitmq:
+        condition: service_healthy
+      livekit:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3003/up || exit 1"]
@@ -232,7 +239,7 @@ services:
 
   # PostgreSQL for API Gateway
   postgres_gateway:
-    image: postgres:18.1-alpine
+    image: postgres:16-alpine
     container_name: mediconnect_postgres_gateway
     environment:
       POSTGRES_DB: api_gateway_development
@@ -252,7 +259,7 @@ services:
 
   # PostgreSQL for Users Service
   postgres_users:
-    image: postgres:18.1-alpine
+    image: postgres:16-alpine
     container_name: mediconnect_postgres_users
     environment:
       POSTGRES_DB: users_service_development
@@ -272,7 +279,7 @@ services:
 
   # PostgreSQL for Doctors Service
   postgres_doctors:
-    image: postgres:18.1-alpine
+    image: postgres:16-alpine
     container_name: mediconnect_postgres_doctors
     environment:
       POSTGRES_DB: doctors_service_development
@@ -292,7 +299,7 @@ services:
 
   # PostgreSQL for Appointments Service
   postgres_appointments:
-    image: postgres:18.1-alpine
+    image: postgres:16-alpine
     container_name: mediconnect_postgres_appointments
     environment:
       POSTGRES_DB: appointments_service_development
@@ -312,7 +319,7 @@ services:
 
   # PostgreSQL for Notifications Service
   postgres_notifications:
-    image: postgres:18.1-alpine
+    image: postgres:16-alpine
     container_name: mediconnect_notifications
     environment:
       POSTGRES_DB: notifications_service_development
@@ -332,7 +339,7 @@ services:
 
   # PostgreSQL for Payments Service
   postgres_payments:
-    image: postgres:18.1-alpine
+    image: postgres:16-alpine
     container_name: mediconnect_postgres_payments
     environment:
       POSTGRES_DB: payments_service_development
@@ -381,6 +388,22 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mediconnect_network
+
+  # LiveKit for video consultations
+  livekit:
+    image: livekit/livekit-server:v1.5.3
+    container_name: mediconnect_livekit
+    command: ["--dev", "--keys", "devkey: secret_that_is_at_least_32_characters_long"]
+    ports:
+      - "7880:7880"   # HTTP/WebSocket
+      - "7881:7881/udp"   # RTC/UDP
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:7880 || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5

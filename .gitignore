@@ -35,3 +35,8 @@ server/*/.env.*
 Thumbs.db
 # RSpec failure tracking
 spec/examples.txt
+server/*/spec/examples.txt
+server/*/.rspec_status
+
+# Coverage aggregate reports (regenerated)
+server/coverage-aggregate/

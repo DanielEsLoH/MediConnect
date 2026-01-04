@@ -157,7 +157,6 @@ class AppointmentLookupService
       cached = Rails.cache.read(cache_key(appointment_id))
       return nil unless cached
 
-      Rails.logger.debug("[AppointmentLookupService] Cache hit for appointment #{appointment_id}")
       cached.symbolize_keys
     end
 

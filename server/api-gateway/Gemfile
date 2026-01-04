@@ -48,7 +48,7 @@ group :development, :test do
   gem "database_cleaner-active_record", "~> 2.1"
 
   # N+1 Query Detection
-  gem "bullet", "~> 8.0"
+  gem "bullet", "~> 8.1"
 
   # Linting
   gem "rubocop", require: false

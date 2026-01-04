@@ -58,7 +58,7 @@ class VideoSessionService
   def build_video_session
     video_session = VideoSession.new(
       appointment_id: @appointment.id,
-      provider: "daily" # Default provider
+      provider: "livekit"
     )
 
     if video_session.save

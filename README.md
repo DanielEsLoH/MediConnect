@@ -25,7 +25,7 @@ Medical appointment management platform built with microservices architecture.
 - Docker and Docker Compose
 - Ruby 3.4.7
 - Node.js 20+
-- PostgreSQL 18.1
+- PostgreSQL 16+
 - Redis 7+
 - RabbitMQ 3+
 
@@ -109,7 +109,7 @@ See comprehensive development plan in `plans/` directory for detailed implementa
 - [ ] **Multi-step booking stepper** (6 steps) - HIGHEST PRIORITY
 - [ ] **Real-time notifications** (NotificationBell + WebSocket)
 - [ ] **Review/rating system UI** (StarRating, ReviewForm, ReviewList)
-- [ ] **Video consultation** (Daily.co integration)
+- [ ] **Video consultation** (LiveKit integration)
 - [ ] **Missing pages** (Home, Appointment Detail, Settings, Video)
 - [ ] **Common components** (Modal, Badge, Avatar, DatePicker, Pagination)
 - [ ] **Custom hooks** (useDebounce, useLocalStorage, useWebSocket, etc.)
@@ -126,7 +126,7 @@ See comprehensive development plan in `plans/` directory for detailed implementa
 
 ### Backend
 - Ruby on Rails 8.1.1 (API mode)
-- PostgreSQL 18.1
+- PostgreSQL 16+
 - Redis 7+
 - RabbitMQ 3.x
 - Sidekiq

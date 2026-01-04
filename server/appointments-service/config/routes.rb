@@ -46,6 +46,8 @@ Rails.application.routes.draw do
         member do
           post :start
           post :end
+          get :token
+          get :connection_info
         end
       end
     end

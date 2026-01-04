@@ -19,8 +19,7 @@ class VideoSession < ApplicationRecord
   validates :status, presence: true
 
   # Callbacks
-  before_validation :generate_room_name, on: :create, unless: :room_name?
-  before_validation :generate_session_url, on: :create, unless: :session_url?
+  before_validation :setup_livekit_room, on: :create, unless: :room_name?
 
   # Scopes
   scope :active_sessions, -> { where(status: :active) }
@@ -60,28 +59,86 @@ class VideoSession < ApplicationRecord
     ((ended_at - started_at) / 60).round
   end
 
+  # Generate a LiveKit token for a specific participant
+  def generate_participant_token(user_id:, user_name:, is_owner: false)
+    livekit_service.generate_token(
+      room_name: room_name,
+      user_id: user_id,
+      user_name: user_name,
+      is_owner: is_owner
+    )
+  end
+
+  # Get token for patient
+  def patient_token
+    return nil unless appointment.present?
+
+    generate_participant_token(
+      user_id: appointment.user_id,
+      user_name: patient_display_name,
+      is_owner: false
+    )
+  end
+
+  # Get token for doctor
+  def doctor_token
+    return nil unless appointment.present?
+
+    generate_participant_token(
+      user_id: appointment.doctor_id,
+      user_name: doctor_display_name,
+      is_owner: true
+    )
+  end
+
+  # URL for patient to join (includes token)
   def patient_url
     return nil unless session_url.present?
 
-    "#{session_url}?role=patient&token=#{generate_token(appointment.user_id, 'patient')}"
+    "#{session_url}?token=#{patient_token}"
   end
 
+  # URL for doctor to join (includes token)
   def doctor_url
     return nil unless session_url.present?
 
-    "#{session_url}?role=doctor&token=#{generate_token(appointment.doctor_id, 'doctor')}"
+    "#{session_url}?token=#{doctor_token}"
+  end
+
+  # Get the LiveKit WebSocket URL for clients
+  def livekit_websocket_url
+    livekit_service.websocket_url
+  end
+
+  # Connection info for frontend clients
+  def connection_info(user_id:, user_name:, is_doctor: false)
+    {
+      room_name: room_name,
+      token: generate_participant_token(
+        user_id: user_id,
+        user_name: user_name,
+        is_owner: is_doctor
+      ),
+      websocket_url: livekit_websocket_url,
+      session_url: session_url
+    }
   end
 
   private
 
-  def generate_room_name
-    self.room_name = "mediconnect-#{appointment_id}-#{SecureRandom.hex(4)}"
+  def setup_livekit_room
+    self.provider = "livekit"
+    self.room_name = livekit_service.create_room(appointment_id)
+    self.session_url = build_session_url
+  rescue LiveKitService::Error => e
+    Rails.logger.error("[VideoSession] Failed to create LiveKit room: #{e.message}")
+    errors.add(:base, "Failed to create video room: #{e.message}")
+    throw(:abort)
   end
 
-  def generate_session_url
-    # Stub implementation - in production, this would integrate with Daily.co or Twilio
-    # For now, generate a placeholder URL
-    self.session_url = "https://mediconnect.daily.co/#{room_name}"
+  def build_session_url
+    base_url = ENV.fetch("LIVEKIT_FRONTEND_URL", "http://localhost:5173/video")
+    "#{base_url}/#{room_name}"
   end
 
   def calculate_duration
@@ -90,15 +147,15 @@ class VideoSession < ApplicationRecord
     ((Time.current - started_at) / 60).round
   end
 
-  def generate_token(user_id, role)
-    # Stub implementation - in production, this would generate a JWT token for video session
-    # For now, generate a simple token
-    payload = {
-      user_id: user_id,
-      role: role,
-      room_name: room_name,
-      exp: 4.hours.from_now.to_i
-    }
-    JWT.encode(payload, Rails.application.credentials.secret_key_base)
+  def livekit_service
+    @livekit_service ||= LiveKitService.new
+  end
+
+  def patient_display_name
+    "Patient"
+  end
+
+  def doctor_display_name
+    "Doctor"
   end
 end

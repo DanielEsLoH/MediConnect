@@ -30,7 +30,7 @@ module Api
           email: user.email,
           first_name: user.first_name,
           last_name: user.last_name,
-          role: user.email == "admin@mediconnect.com" ? "admin" : "user",
+          role: user.email == "admin@mediconnect.com" ? "admin" : "user"
           # Add other fields required by API Gateway token generation
         }
       end

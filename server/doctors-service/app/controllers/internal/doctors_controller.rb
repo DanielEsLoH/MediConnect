@@ -60,7 +60,7 @@ module Internal
     # @param date [String] Date in YYYY-MM-DD format
     # @return [JSON] Available slots and scheduling info
     def availability
-      doctor = Doctor.includes(:schedules).find(params[:id])
+      doctor = Doctor.find(params[:id])
       date = params[:date].present? ? Date.parse(params[:date]) : Date.today
 
       availability_service = AvailabilityService.new(doctor)
@@ -120,7 +120,7 @@ module Internal
     # @param scheduled_at [String] ISO8601 datetime
     # @return [JSON] { valid: true/false, reason: "..." }
     def validate_for_appointment
-      doctor = Doctor.includes(:schedules).find(params[:id])
+      doctor = Doctor.find(params[:id])
       scheduled_at = Time.parse(params[:scheduled_at])
 
       validation = validate_appointment_slot(doctor, scheduled_at)

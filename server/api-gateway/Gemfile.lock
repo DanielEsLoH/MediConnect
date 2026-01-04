@@ -418,7 +418,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootsnap
   brakeman
-  bullet (~> 8.0)
+  bullet (~> 8.1)
   bundler-audit
   database_cleaner-active_record (~> 2.1)
   debug

@@ -72,32 +72,9 @@ module Api
       # @return [JSON] Payment details
       def create
         payment = Payment.new(payment_params)
-        
-        # If user_id is not provided, infer it (e.g. current user)
-        # But for this test flow, we might be creating it for another user (the patient)
-        # However, the script doesn't pass user_id in payment payload.
-        # Payment model likely requires user_id.
-        
-        # If appointment_id is present, get user_id from appointment?
-        # Ideally the caller provides it.
-        
-        # For now, let's assume if user_id is missing, use current_user_id (which is admin)
-        # BUT appointment belongs to patient.
-        
-        # Let's see if Payment requires user_id. Schema says yes? Likely.
-        
-        # We'll assign current_user_id if not present.
         payment.user_id ||= current_user_id
 
         if payment.save
-          # If status is completed, trigger event?
-          # The model callbacks likely handle event publishing.
-          
-          if payment.status == "completed"
-             # Manually trigger event if model doesn't (checking model would be good but I'll assume it does or I'll add it)
-             # Payment.rb likely has after_save callbacks.
-          end
-
           render json: serialize_payment(payment), status: :created
         else
           render json: { errors: payment.errors.full_messages }, status: :unprocessable_entity

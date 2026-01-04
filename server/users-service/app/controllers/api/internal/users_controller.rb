@@ -2,7 +2,7 @@
 
 module Api
   module Internal
-    # Internal API controller for user data
+  # Internal API controller for user data
   # Called by other microservices to fetch user information
   #
   # @example Fetch user from Notifications Service
@@ -133,5 +133,5 @@ module Api
       }
     end
   end
-end
+  end
 end

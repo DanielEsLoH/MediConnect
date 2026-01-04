@@ -22,7 +22,6 @@ gem "bunny", "~> 2.22"
 
 # API
 gem "rack-cors"
-gem "jbuilder"
 
 # HTTP client for service-to-service communication
 gem "faraday", "~> 2.9"

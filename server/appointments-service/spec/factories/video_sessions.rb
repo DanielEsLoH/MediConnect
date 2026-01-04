@@ -4,8 +4,8 @@ FactoryBot.define do
   factory :video_session do
     association :appointment, factory: [ :appointment, :video_consultation ]
     room_name { "mediconnect-#{SecureRandom.hex(8)}" }
-    session_url { "https://mediconnect.daily.co/#{room_name}" }
-    provider { "daily" }
+    session_url { "http://localhost:5173/video/#{room_name}" }
+    provider { "livekit" }
     status { "created" }
 
     trait :active do

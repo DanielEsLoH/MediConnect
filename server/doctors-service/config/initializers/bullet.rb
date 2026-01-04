@@ -24,6 +24,14 @@ if defined?(Bullet)
   Bullet.stacktrace_includes = []
   Bullet.stacktrace_excludes = []
 
+  # Whitelist N+1 and counter cache for Doctor => reviews
+  # A proper counter cache requires a migration to add reviews_count column.
+  # The average_rating method uses SQL aggregate (reviews.average(:rating)) which
+  # doesn't work with eager loading. For batch operations with max 100 doctors,
+  # we accept this trade-off as the performance impact is minimal.
+  Bullet.add_safelist type: :counter_cache, class_name: "Doctor", association: :reviews
+  Bullet.add_safelist type: :n_plus_one_query, class_name: "Doctor", association: :reviews
+
   case Rails.env
   when "test"
     # STRICT MODE: Raise errors on N+1 queries in tests
@@ -60,7 +68,4 @@ if defined?(Bullet)
     Bullet.bullet_logger = true
   end
 
-  # Stacktrace configuration - show 3 lines for context
-  # This helps identify the source of N+1 queries
-  Bullet.stacktrace_level = 3
 end

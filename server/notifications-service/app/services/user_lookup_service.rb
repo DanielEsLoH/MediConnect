@@ -153,13 +153,11 @@ class UserLookupService
       cached = Rails.cache.read(cache_key(user_id))
       return nil unless cached
 
-      Rails.logger.debug("[UserLookupService] Cache hit for user #{user_id}")
       cached.symbolize_keys
     end
 
     def store_in_cache(user_id, user_data)
       Rails.cache.write(cache_key(user_id), user_data, expires_in: CACHE_TTL)
-      Rails.logger.debug("[UserLookupService] Cached user #{user_id}")
     end
 
     def cache_key(user_id)

@@ -3,7 +3,9 @@
 module Api
   module V1
     class DoctorsController < ApplicationController
-      before_action :set_doctor, only: [ :show, :availability, :reviews ]
+      before_action :set_doctor, only: [ :show ]
+      before_action :set_doctor_for_availability, only: [ :availability ]
+      before_action :set_doctor_for_reviews, only: [ :reviews ]
 
       # GET /api/v1/doctors
       def index
@@ -114,6 +116,18 @@ module Api
 
       def set_doctor
         @doctor = Doctor.active.includes(:specialty, :clinic, :schedules).find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: "Doctor not found" }, status: :not_found
+      end
+
+      def set_doctor_for_availability
+        @doctor = Doctor.active.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        render json: { error: "Doctor not found" }, status: :not_found
+      end
+
+      def set_doctor_for_reviews
+        @doctor = Doctor.active.includes(:reviews).find(params[:id])
       rescue ActiveRecord::RecordNotFound
         render json: { error: "Doctor not found" }, status: :not_found
       end

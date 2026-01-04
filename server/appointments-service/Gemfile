@@ -22,11 +22,13 @@ gem "jwt", "~> 2.7"
 
 # API
 gem "rack-cors"
-gem "jbuilder"
 
 # HTTP client for service-to-service communication
 gem "faraday", "~> 2.9"
 gem "faraday-retry", "~> 2.2"
+
+# Video consultation integration
+gem "livekit-server-sdk", "~> 0.7"
 
 # Environment configuration
 gem "dotenv-rails", groups: [ :development, :test ]
@@ -53,8 +55,7 @@ group :development, :test do
   gem "faker", "~> 3.2"
 
   # N+1 Query Detection
-  # Note: bullet 8.x supports Rails 8.1+
-  gem "bullet", "~> 8.0"
+  gem "bullet", "~> 8.1"
 
   # Linting
   gem "rubocop", require: false

@@ -40,12 +40,7 @@ class SmsService
     # Fetch from Users Service
     @user_data = UserLookupService.contact_info(notification.user_id)
 
-    if @user_data
-      Rails.logger.debug(
-        "[SmsService] Fetched user data from Users Service " \
-        "user_id=#{notification.user_id}"
-      )
-    else
+    unless @user_data
       Rails.logger.warn(
         "[SmsService] Could not fetch user data from Users Service " \
         "user_id=#{notification.user_id}"
