@@ -84,7 +84,8 @@ export default function RegisterPage() {
     mutationFn: authApi.register,
     onSuccess: (data) => {
       // Auto-login after registration
-      login(data.user, data.token);
+      // Backend returns tokens.access_token, not token
+      login(data.user, data.tokens.access_token);
       toast.success("Account created successfully! Welcome to MediConnect.");
       navigate("/dashboard");
     },

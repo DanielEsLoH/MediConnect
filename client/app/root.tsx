@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   isRouteErrorResponse,
   Links,
@@ -55,33 +56,43 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  // Prevent hydration mismatch by only rendering Toaster on client
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          duration: 4000,
-          style: {
-            background: "#fff",
-            color: "#374151",
-            borderRadius: "0.75rem",
-            boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-          },
-          success: {
-            iconTheme: {
-              primary: "#10B981",
-              secondary: "#fff",
+      {/* Only render Toaster on client to prevent hydration mismatch */}
+      {isClient && (
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: "#fff",
+              color: "#374151",
+              borderRadius: "0.75rem",
+              boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
             },
-          },
-          error: {
-            iconTheme: {
-              primary: "#EF4444",
-              secondary: "#fff",
+            success: {
+              iconTheme: {
+                primary: "#10B981",
+                secondary: "#fff",
+              },
             },
-          },
-        }}
-      />
+            error: {
+              iconTheme: {
+                primary: "#EF4444",
+                secondary: "#fff",
+              },
+            },
+          }}
+        />
+      )}
     </QueryClientProvider>
   );
 }

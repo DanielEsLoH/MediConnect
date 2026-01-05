@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigate, Outlet, useLocation } from "react-router";
 
 import { useAuthStore } from "~/store/useAuthStore";
@@ -23,32 +23,27 @@ import { cn } from "~/lib/utils";
  */
 export function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const location = useLocation();
 
-  // Handle loading state while hydrating from localStorage
-  // This prevents flash of login page on refresh
-  if (typeof window !== "undefined" && !isAuthenticated) {
-    // Check if we're still hydrating from localStorage
-    const stored = localStorage.getItem("mediconnect-auth");
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (parsed?.state?.isAuthenticated) {
-          // Still hydrating, show loading spinner
-          return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
-              <Spinner size="lg" center label="Loading..." />
-            </div>
-          );
-        }
-      } catch {
-        // Invalid JSON in storage, continue to redirect
-      }
-    }
+  // Wait for client-side hydration to complete before checking auth
+  // This prevents hydration mismatch by rendering consistent content on server and client
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  // Show loading spinner during SSR and initial hydration
+  // This ensures server and client render the same content initially
+  if (!isHydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+        <Spinner size="lg" center label="Loading..." />
+      </div>
+    );
   }
 
-  // Redirect to login if not authenticated
+  // After hydration, redirect to login if not authenticated
   if (!isAuthenticated) {
     // Save the attempted URL to redirect back after login
     return <Navigate to="/login" state={{ from: location }} replace />;

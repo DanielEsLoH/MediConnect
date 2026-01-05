@@ -1,9 +1,5 @@
 import api from "~/lib/api";
-import type {
-  Appointment,
-  CreateAppointmentPayload,
-  CreateAppointmentResponse,
-} from "../types";
+import type { Appointment, CreateAppointmentPayload } from "../types";
 
 /**
  * Appointments API service.
@@ -18,11 +14,11 @@ export const appointmentsApi = {
   createAppointment: async (
     payload: CreateAppointmentPayload
   ): Promise<Appointment> => {
-    const response = await api.post<CreateAppointmentResponse>(
+    const response = await api.post<{ appointment: Appointment }>(
       "/appointments",
       payload
     );
-    return response.data.data;
+    return response.data.appointment;
   },
 
   /**
@@ -30,8 +26,8 @@ export const appointmentsApi = {
    * @returns List of appointments
    */
   getAppointments: async (): Promise<Appointment[]> => {
-    const response = await api.get<{ data: Appointment[] }>("/appointments");
-    return response.data.data;
+    const response = await api.get<{ appointments: Appointment[] }>("/appointments");
+    return response.data.appointments ?? [];
   },
 
   /**
@@ -40,8 +36,8 @@ export const appointmentsApi = {
    * @returns Appointment details
    */
   getAppointmentById: async (id: number): Promise<Appointment> => {
-    const response = await api.get<{ data: Appointment }>(`/appointments/${id}`);
-    return response.data.data;
+    const response = await api.get<{ appointment: Appointment }>(`/appointments/${id}`);
+    return response.data.appointment;
   },
 
   /**
@@ -50,9 +46,9 @@ export const appointmentsApi = {
    * @returns Updated appointment with cancelled status
    */
   cancelAppointment: async (id: number): Promise<Appointment> => {
-    const response = await api.patch<{ data: Appointment }>(
+    const response = await api.patch<{ appointment: Appointment }>(
       `/appointments/${id}/cancel`
     );
-    return response.data.data;
+    return response.data.appointment;
   },
 };

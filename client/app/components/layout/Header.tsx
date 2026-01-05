@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { authApi } from "~/features/auth/api/auth-api";
 import { useAuthStore } from "~/store/useAuthStore";
 import { Button } from "~/components/ui";
+import { NotificationBell } from "~/components/notifications/NotificationBell";
 import { cn } from "~/lib/utils";
 
 /**
@@ -125,8 +126,14 @@ export function Header({ onMenuToggle }: HeaderProps) {
         </div>
       </div>
 
-      {/* Right section: User info and logout */}
-      <div className="flex items-center gap-3 sm:gap-4">
+      {/* Right section: Notifications, user info, and logout */}
+      <div className="flex items-center gap-2 sm:gap-4">
+        {/* Notification bell */}
+        <NotificationBell />
+
+        {/* Divider - visible on larger screens */}
+        <div className="hidden sm:block h-6 w-px bg-gray-200 dark:bg-gray-700" />
+
         {/* User info - hidden on very small screens */}
         <div className="hidden sm:flex items-center gap-3">
           {/* User avatar */}

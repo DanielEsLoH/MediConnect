@@ -53,7 +53,8 @@ export default function LoginPage() {
     mutationFn: authApi.login,
     onSuccess: (data) => {
       // Store user and token in Zustand
-      login(data.user, data.token);
+      // Backend returns tokens.access_token, not token
+      login(data.user, data.tokens.access_token);
       toast.success(`Welcome back, ${data.user.first_name}!`);
       navigate("/dashboard");
     },

@@ -67,10 +67,21 @@ export interface RegisterRequest {
 }
 
 /**
+ * Token response structure from the API Gateway
+ */
+export interface TokenResponse {
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  expires_in: number;
+}
+
+/**
  * Authentication response from login/register endpoints
  */
 export interface AuthResponse {
-  token: string;
+  message: string;
+  tokens: TokenResponse;
   user: User;
 }
 

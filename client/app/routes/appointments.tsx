@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from "react";
 import { Link } from "react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { useAuthStore } from "~/store/useAuthStore";
 import { Button, Spinner } from "~/components/ui";
 import { cn } from "~/lib/utils";
 import {
@@ -279,13 +280,14 @@ function ErrorState({ message, onRetry }: ErrorStateProps) {
  */
 export default function AppointmentsPage() {
   const queryClient = useQueryClient();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [cancellingId, setCancellingId] = useState<number | null>(null);
   const [toast, setToast] = useState<{
     message: string;
     type: "success" | "error";
   } | null>(null);
 
-  // Fetch appointments
+  // Fetch appointments - only when authenticated
   const {
     data: appointments,
     isLoading,
@@ -295,8 +297,15 @@ export default function AppointmentsPage() {
   } = useQuery({
     queryKey: appointmentKeys.list(),
     queryFn: appointmentsApi.getAppointments,
+    enabled: isAuthenticated, // Only fetch when authenticated
     staleTime: 1000 * 60 * 2, // Consider data fresh for 2 minutes
-    retry: 2,
+    retry: (failureCount, error) => {
+      // Don't retry on 401 errors (handled by interceptor)
+      if ((error as Error & { response?: { status: number } })?.response?.status === 401) {
+        return false;
+      }
+      return failureCount < 2;
+    },
   });
 
   // Cancel appointment mutation with optimistic update

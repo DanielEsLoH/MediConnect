@@ -336,6 +336,7 @@ export default function PaymentsPage() {
   const stripeConfigured = isStripeConfigured();
 
   // Fetch payments
+  // Note: Backend payments endpoint may not be fully implemented yet
   const {
     data: payments,
     isLoading,
@@ -346,7 +347,7 @@ export default function PaymentsPage() {
     queryKey: paymentKeys.list(),
     queryFn: paymentsApi.getPayments,
     staleTime: 1000 * 60 * 2, // Consider data fresh for 2 minutes
-    retry: 2,
+    retry: false, // Don't retry - backend may not have this endpoint
   });
 
   // Handle view payment details

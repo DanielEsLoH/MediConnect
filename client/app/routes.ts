@@ -11,8 +11,14 @@ export default [
     route("dashboard", "routes/dashboard.tsx"),
     route("doctors", "routes/doctors.tsx"),
     route("doctors/:id", "routes/doctor-detail.$id.tsx"),
+    route("doctors/:id/book", "routes/doctors.$id.book.tsx"),
     route("appointments", "routes/appointments.tsx"),
+    route("appointments/:id", "routes/appointments.$id.tsx"),
     route("payments", "routes/payments.tsx"),
     route("profile", "routes/profile.tsx"),
+    route("settings", "routes/settings.tsx"),
   ]),
+
+  // Video consultation (full-screen, no layout)
+  route("video/:id", "routes/video.$id.tsx"),
 ] satisfies RouteConfig;
