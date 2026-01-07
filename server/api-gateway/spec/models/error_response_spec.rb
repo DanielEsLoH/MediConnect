@@ -49,7 +49,7 @@ RSpec.describe ErrorResponse do
     end
 
     it "includes details when provided" do
-      details = ["Field1 is required", "Field2 is invalid"]
+      details = [ "Field1 is required", "Field2 is invalid" ]
       response = described_class.build(
         status: :unprocessable_entity,
         error: "validation_failed",
@@ -91,9 +91,9 @@ RSpec.describe ErrorResponse do
     end
 
     it "includes details when provided" do
-      response = described_class.bad_request("Invalid input", details: ["Field is required"])
+      response = described_class.bad_request("Invalid input", details: [ "Field is required" ])
 
-      expect(response[:details]).to eq(["Field is required"])
+      expect(response[:details]).to eq([ "Field is required" ])
     end
   end
 
@@ -165,7 +165,7 @@ RSpec.describe ErrorResponse do
     end
 
     it "includes validation details" do
-      errors = ["Email is invalid", "Name is required"]
+      errors = [ "Email is invalid", "Name is required" ]
       response = described_class.unprocessable_entity("Validation failed", details: errors)
 
       expect(response[:details]).to eq(errors)
@@ -246,7 +246,7 @@ RSpec.describe ErrorResponse do
     end
 
     it "handles ActiveRecord::RecordInvalid" do
-      errors_mock = double("Errors", full_messages: ["Email is invalid"])
+      errors_mock = double("Errors", full_messages: [ "Email is invalid" ])
       record_mock = double("Record", errors: errors_mock)
       # Create the exception without passing a record, then stub the record method
       exception = ActiveRecord::RecordInvalid.allocate
@@ -256,7 +256,7 @@ RSpec.describe ErrorResponse do
 
       expect(response[:status]).to eq(422)
       expect(response[:error]).to eq("unprocessable_entity")
-      expect(response[:details]).to eq(["Email is invalid"])
+      expect(response[:details]).to eq([ "Email is invalid" ])
     end
 
     it "handles ActionController::ParameterMissing" do

@@ -109,7 +109,7 @@ RSpec.describe "Api::Internal::Users", type: :request do
 
       it "handles partial matches" do
         non_existent_id = "non-existent-uuid"
-        mixed_ids = [users.first.id, non_existent_id]
+        mixed_ids = [ users.first.id, non_existent_id ]
 
         post "/api/internal/users/batch",
              params: { user_ids: mixed_ids },
@@ -122,7 +122,7 @@ RSpec.describe "Api::Internal::Users", type: :request do
 
       it "returns empty array when no users found" do
         post "/api/internal/users/batch",
-             params: { user_ids: ["non-existent-1", "non-existent-2"] },
+             params: { user_ids: [ "non-existent-1", "non-existent-2" ] },
              headers: internal_headers
 
         expect(response).to have_http_status(:ok)

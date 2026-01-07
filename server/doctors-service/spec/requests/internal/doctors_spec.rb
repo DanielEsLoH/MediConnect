@@ -124,7 +124,7 @@ RSpec.describe "Internal::Doctors", type: :request do
 
     it "returns multiple doctors by IDs" do
       post "/internal/doctors/batch",
-        params: { doctor_ids: [doctor.id, doctor2.id] },
+        params: { doctor_ids: [ doctor.id, doctor2.id ] },
         headers: internal_headers
 
       expect(response).to have_http_status(:ok)
@@ -137,7 +137,7 @@ RSpec.describe "Internal::Doctors", type: :request do
 
     it "includes meta information about requested vs found" do
       post "/internal/doctors/batch",
-        params: { doctor_ids: [doctor.id, doctor2.id, "nonexistent-id"] },
+        params: { doctor_ids: [ doctor.id, doctor2.id, "nonexistent-id" ] },
         headers: internal_headers
 
       json = JSON.parse(response.body)
@@ -147,7 +147,7 @@ RSpec.describe "Internal::Doctors", type: :request do
 
     it "returns empty array when no doctors found" do
       post "/internal/doctors/batch",
-        params: { doctor_ids: ["nonexistent-1", "nonexistent-2"] },
+        params: { doctor_ids: [ "nonexistent-1", "nonexistent-2" ] },
         headers: internal_headers
 
       json = JSON.parse(response.body)

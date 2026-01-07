@@ -60,7 +60,7 @@ RSpec.describe Clinic, type: :model do
         active_clinic = create(:clinic, active: true)
         create(:clinic, :inactive)
 
-        expect(Clinic.active).to eq([active_clinic])
+        expect(Clinic.active).to eq([ active_clinic ])
       end
     end
 
@@ -69,7 +69,7 @@ RSpec.describe Clinic, type: :model do
       let!(:los_angeles) { create(:clinic, city: "Los Angeles") }
 
       it "filters by city" do
-        expect(Clinic.by_city("New York")).to eq([new_york])
+        expect(Clinic.by_city("New York")).to eq([ new_york ])
       end
 
       it "returns all clinics when city is blank" do
@@ -83,7 +83,7 @@ RSpec.describe Clinic, type: :model do
       let!(:new_york) { create(:clinic, state: "NY") }
 
       it "filters by state" do
-        expect(Clinic.by_state("CA")).to eq([california])
+        expect(Clinic.by_state("CA")).to eq([ california ])
       end
 
       it "returns all clinics when state is blank" do

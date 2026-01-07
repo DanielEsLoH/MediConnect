@@ -138,7 +138,7 @@ RSpec.describe "Internal::AppointmentsController", type: :request do
 
     context "with some non-existent IDs" do
       it "returns only found appointments" do
-        ids = appointments.take(2).map(&:id) + [SecureRandom.uuid]
+        ids = appointments.take(2).map(&:id) + [ SecureRandom.uuid ]
 
         post "/internal/appointments/batch",
           params: { appointment_ids: ids }.to_json,

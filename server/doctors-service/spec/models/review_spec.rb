@@ -81,7 +81,7 @@ RSpec.describe Review, type: :model do
         verified = create(:review, :verified)
         create(:review, verified: false)
 
-        expect(Review.verified_reviews).to eq([verified])
+        expect(Review.verified_reviews).to eq([ verified ])
       end
     end
 
@@ -91,7 +91,7 @@ RSpec.describe Review, type: :model do
         new_review = create(:review, created_at: 1.day.ago)
         newest_review = create(:review, created_at: 1.hour.ago)
 
-        expect(Review.recent.to_a).to eq([newest_review, new_review, old_review])
+        expect(Review.recent.to_a).to eq([ newest_review, new_review, old_review ])
       end
     end
 
@@ -101,7 +101,7 @@ RSpec.describe Review, type: :model do
       let!(:three_star) { create(:review, rating: 3) }
 
       it "filters by specific rating" do
-        expect(Review.by_rating(5)).to eq([five_star])
+        expect(Review.by_rating(5)).to eq([ five_star ])
       end
 
       it "returns all reviews when rating is blank" do

@@ -188,7 +188,7 @@ RSpec.describe HttpClient do
         stub_request(:post, "#{base_url}/api/appointments")
           .to_return(
             status: 422,
-            body: { errors: ["Doctor not available"] }.to_json,
+            body: { errors: [ "Doctor not available" ] }.to_json,
             headers: { "Content-Type" => "application/json" }
           )
       end

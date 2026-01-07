@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :internal do
       post "authenticate", to: "authentication#authenticate"
-      
+
       resources :users, only: [ :show ] do
         collection do
           post :batch
@@ -25,7 +25,7 @@ Rails.application.routes.draw do
           get :exists
         end
       end
-      
+
       # Password reset endpoints
       post "password/reset", to: "password_reset#create"
       put "password/reset", to: "password_reset#update"

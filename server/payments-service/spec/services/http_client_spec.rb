@@ -225,7 +225,7 @@ RSpec.describe HttpClient do
         stub_request(:get, "#{base_url}/api/users/1")
           .to_return(
             status: 422,
-            body: { errors: ["Invalid data"] }.to_json,
+            body: { errors: [ "Invalid data" ] }.to_json,
             headers: { "Content-Type" => "application/json" }
           )
       end
@@ -376,7 +376,7 @@ RSpec.describe HttpClient do
         stub_request(:post, "#{base_url}/api/appointments")
           .to_return(
             status: 422,
-            body: { errors: ["Doctor not available"] }.to_json,
+            body: { errors: [ "Doctor not available" ] }.to_json,
             headers: { "Content-Type" => "application/json" }
           )
       end
@@ -549,8 +549,6 @@ RSpec.describe HttpClient do
         expect(result[:circuit_state]).to eq(:closed)
       end
     end
-
-
   end
 
   describe ".health_check_all" do
@@ -633,7 +631,7 @@ RSpec.describe HttpClient do
       end
 
       it "returns false for non-2xx status" do
-        [199, 300, 400, 500].each do |status|
+        [ 199, 300, 400, 500 ].each do |status|
           response = described_class::Response.new(status: status, body: {}, headers: {})
           expect(response).not_to be_success, "Expected status #{status} not to be success"
         end
@@ -649,7 +647,7 @@ RSpec.describe HttpClient do
       end
 
       it "returns false for non-3xx status" do
-        [200, 299, 400, 500].each do |status|
+        [ 200, 299, 400, 500 ].each do |status|
           response = described_class::Response.new(status: status, body: {}, headers: {})
           expect(response).not_to be_redirect, "Expected status #{status} not to be redirect"
         end
@@ -658,14 +656,14 @@ RSpec.describe HttpClient do
 
     describe "#client_error?" do
       it "returns true for 4xx status" do
-        [400, 401, 403, 404, 422, 429, 499].each do |status|
+        [ 400, 401, 403, 404, 422, 429, 499 ].each do |status|
           response = described_class::Response.new(status: status, body: {}, headers: {})
           expect(response).to be_client_error, "Expected status #{status} to be client_error"
         end
       end
 
       it "returns false for non-4xx status" do
-        [200, 301, 399, 500].each do |status|
+        [ 200, 301, 399, 500 ].each do |status|
           response = described_class::Response.new(status: status, body: {}, headers: {})
           expect(response).not_to be_client_error, "Expected status #{status} not to be client_error"
         end
@@ -674,14 +672,14 @@ RSpec.describe HttpClient do
 
     describe "#server_error?" do
       it "returns true for 5xx status" do
-        [500, 502, 503, 504, 599].each do |status|
+        [ 500, 502, 503, 504, 599 ].each do |status|
           response = described_class::Response.new(status: status, body: {}, headers: {})
           expect(response).to be_server_error, "Expected status #{status} to be server_error"
         end
       end
 
       it "returns false for non-5xx status" do
-        [200, 301, 400, 499].each do |status|
+        [ 200, 301, 400, 499 ].each do |status|
           response = described_class::Response.new(status: status, body: {}, headers: {})
           expect(response).not_to be_server_error, "Expected status #{status} not to be server_error"
         end

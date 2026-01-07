@@ -169,7 +169,7 @@ RSpec.describe Payment, type: :model do
         new_payment = create(:payment, created_at: 1.day.ago)
         newest_payment = create(:payment, created_at: 1.hour.ago)
 
-        expect(Payment.recent).to eq([newest_payment, new_payment, old_payment])
+        expect(Payment.recent).to eq([ newest_payment, new_payment, old_payment ])
       end
     end
 

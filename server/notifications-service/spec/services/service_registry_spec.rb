@@ -354,7 +354,7 @@ RSpec.describe ServiceRegistry do
     it "returns a boolean" do
       result = described_class.redis_available?
 
-      expect([true, false]).to include(result)
+      expect([ true, false ]).to include(result)
     end
   end
 end

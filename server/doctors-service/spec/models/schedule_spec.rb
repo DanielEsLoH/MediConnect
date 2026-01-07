@@ -91,7 +91,7 @@ RSpec.describe Schedule, type: :model do
         active = create(:schedule, active: true)
         create(:schedule, :inactive)
 
-        expect(Schedule.active_schedules).to eq([active])
+        expect(Schedule.active_schedules).to eq([ active ])
       end
     end
 
@@ -100,8 +100,8 @@ RSpec.describe Schedule, type: :model do
       let!(:tuesday_schedule) { create(:schedule, day_of_week: :tuesday) }
 
       it "filters by day of week" do
-        expect(Schedule.for_day(:monday)).to eq([monday_schedule])
-        expect(Schedule.for_day(1)).to eq([monday_schedule])
+        expect(Schedule.for_day(:monday)).to eq([ monday_schedule ])
+        expect(Schedule.for_day(1)).to eq([ monday_schedule ])
       end
     end
 
@@ -112,7 +112,7 @@ RSpec.describe Schedule, type: :model do
       let!(:schedule2) { create(:schedule, doctor: doctor2) }
 
       it "filters by doctor" do
-        expect(Schedule.for_doctor(doctor1.id)).to eq([schedule1])
+        expect(Schedule.for_doctor(doctor1.id)).to eq([ schedule1 ])
       end
     end
   end

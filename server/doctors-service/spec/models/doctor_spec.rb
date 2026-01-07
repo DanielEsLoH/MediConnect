@@ -152,7 +152,7 @@ RSpec.describe Doctor, type: :model do
         active_doctor = create(:doctor, active: true)
         create(:doctor, :inactive)
 
-        expect(Doctor.active).to eq([active_doctor])
+        expect(Doctor.active).to eq([ active_doctor ])
       end
     end
 
@@ -161,7 +161,7 @@ RSpec.describe Doctor, type: :model do
         accepting = create(:doctor, accepting_new_patients: true)
         create(:doctor, :not_accepting_patients)
 
-        expect(Doctor.accepting_patients).to eq([accepting])
+        expect(Doctor.accepting_patients).to eq([ accepting ])
       end
     end
 
@@ -171,7 +171,7 @@ RSpec.describe Doctor, type: :model do
         doctor = create(:doctor, specialty: specialty)
         create(:doctor)
 
-        expect(Doctor.by_specialty(specialty.id)).to eq([doctor])
+        expect(Doctor.by_specialty(specialty.id)).to eq([ doctor ])
       end
 
       it "returns all doctors when specialty_id is blank" do
@@ -188,7 +188,7 @@ RSpec.describe Doctor, type: :model do
         doctor = create(:doctor, clinic: clinic)
         create(:doctor)
 
-        expect(Doctor.by_clinic(clinic.id)).to eq([doctor])
+        expect(Doctor.by_clinic(clinic.id)).to eq([ doctor ])
       end
 
       it "returns all doctors when clinic_id is blank" do
@@ -200,13 +200,13 @@ RSpec.describe Doctor, type: :model do
     end
 
     describe ".by_language" do
-      let!(:spanish_doctor) { create(:doctor, languages: ["English", "Spanish"]) }
-      let!(:french_doctor) { create(:doctor, languages: ["English", "French"]) }
-      let!(:english_only) { create(:doctor, languages: ["English"]) }
+      let!(:spanish_doctor) { create(:doctor, languages: [ "English", "Spanish" ]) }
+      let!(:french_doctor) { create(:doctor, languages: [ "English", "French" ]) }
+      let!(:english_only) { create(:doctor, languages: [ "English" ]) }
 
       it "filters by language" do
-        expect(Doctor.by_language("Spanish")).to eq([spanish_doctor])
-        expect(Doctor.by_language("French")).to eq([french_doctor])
+        expect(Doctor.by_language("Spanish")).to eq([ spanish_doctor ])
+        expect(Doctor.by_language("French")).to eq([ french_doctor ])
       end
 
       it "returns all doctors when language is blank" do

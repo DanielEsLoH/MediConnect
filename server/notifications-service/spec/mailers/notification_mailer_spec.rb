@@ -25,7 +25,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     end
 
     it "renders the headers" do
-      expect(mail.to).to eq([user_email])
+      expect(mail.to).to eq([ user_email ])
       expect(mail.subject).to eq(notification.title)
     end
 
@@ -54,7 +54,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     end
 
     it "renders the headers" do
-      expect(mail.to).to eq([user_email])
+      expect(mail.to).to eq([ user_email ])
       expect(mail.subject).to eq(notification.title)
     end
 
@@ -83,7 +83,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     end
 
     it "renders the headers" do
-      expect(mail.to).to eq([user_email])
+      expect(mail.to).to eq([ user_email ])
       expect(mail.subject).to eq(notification.title)
     end
 
@@ -111,7 +111,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     end
 
     it "renders the headers" do
-      expect(mail.to).to eq([user_email])
+      expect(mail.to).to eq([ user_email ])
       expect(mail.subject).to eq(notification.title)
     end
 
@@ -138,7 +138,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     end
 
     it "renders the headers" do
-      expect(mail.to).to eq([user_email])
+      expect(mail.to).to eq([ user_email ])
       expect(mail.subject).to eq("Appointment Completed")
     end
   end
@@ -163,7 +163,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     end
 
     it "renders the headers" do
-      expect(mail.to).to eq([user_email])
+      expect(mail.to).to eq([ user_email ])
       expect(mail.subject).to eq("Reset Your Password")
     end
 
@@ -192,7 +192,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     end
 
     it "renders the headers" do
-      expect(mail.to).to eq([user_email])
+      expect(mail.to).to eq([ user_email ])
       expect(mail.subject).to eq(notification.title)
     end
 
@@ -219,7 +219,7 @@ RSpec.describe NotificationMailer, type: :mailer do
     end
 
     it "renders the headers" do
-      expect(mail.to).to eq([user_email])
+      expect(mail.to).to eq([ user_email ])
       expect(mail.subject).to eq("General Notification")
     end
 

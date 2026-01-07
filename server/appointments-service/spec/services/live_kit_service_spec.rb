@@ -382,7 +382,7 @@ RSpec.describe LiveKitService do
 
     context "when room exists" do
       before do
-        allow(room_service_client).to receive(:list_rooms).and_return([mock_room])
+        allow(room_service_client).to receive(:list_rooms).and_return([ mock_room ])
       end
 
       it "returns the room" do
@@ -392,7 +392,7 @@ RSpec.describe LiveKitService do
       end
 
       it "calls list_rooms with the room name in an array" do
-        expect(room_service_client).to receive(:list_rooms).with([room_name])
+        expect(room_service_client).to receive(:list_rooms).with([ room_name ])
 
         service.get_room(room_name)
       end
@@ -440,7 +440,7 @@ RSpec.describe LiveKitService do
 
     context "when participants exist" do
       before do
-        allow(room_service_client).to receive(:list_participants).and_return([participant1, participant2])
+        allow(room_service_client).to receive(:list_participants).and_return([ participant1, participant2 ])
       end
 
       it "returns array of participants" do

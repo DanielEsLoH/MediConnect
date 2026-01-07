@@ -94,8 +94,8 @@ RSpec.describe "Api::V1::Doctors", type: :request do
       end
 
       it "filters by language" do
-        spanish_doctor = create(:doctor, languages: ["English", "Spanish"])
-        french_doctor = create(:doctor, languages: ["English", "French"])
+        spanish_doctor = create(:doctor, languages: [ "English", "Spanish" ])
+        french_doctor = create(:doctor, languages: [ "English", "French" ])
 
         get "/api/v1/doctors", params: { language: "Spanish" }
 
@@ -267,7 +267,7 @@ RSpec.describe "Api::V1::Doctors", type: :request do
     end
 
     it "filters by language in search" do
-      spanish_doctor = create(:doctor, languages: ["Spanish"])
+      spanish_doctor = create(:doctor, languages: [ "Spanish" ])
 
       get "/api/v1/doctors/search", params: { language: "Spanish" }
 

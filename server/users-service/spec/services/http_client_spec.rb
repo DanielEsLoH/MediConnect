@@ -15,7 +15,7 @@ RSpec.describe HttpClient do
     allow(ServiceRegistry).to receive(:record_failure)
     allow(ServiceRegistry).to receive(:health_path_for).with(:doctors).and_return("/health")
     allow(ServiceRegistry).to receive(:circuit_state).with(:doctors).and_return(:closed)
-    allow(ServiceRegistry).to receive(:service_names).and_return([:users, :doctors, :appointments, :notifications, :payments])
+    allow(ServiceRegistry).to receive(:service_names).and_return([ :users, :doctors, :appointments, :notifications, :payments ])
 
     # Clear thread-local variables
     Thread.current[:request_id] = nil
@@ -446,7 +446,7 @@ RSpec.describe HttpClient do
 
     describe ".health_check_all" do
       before do
-        [:users, :doctors, :appointments, :notifications, :payments].each do |service|
+        [ :users, :doctors, :appointments, :notifications, :payments ].each do |service|
           allow(ServiceRegistry).to receive(:url_for).with(service).and_return("http://#{service}-service:3000")
           allow(ServiceRegistry).to receive(:health_path_for).with(service).and_return("/health")
           allow(ServiceRegistry).to receive(:circuit_state).with(service).and_return(:closed)
@@ -458,7 +458,7 @@ RSpec.describe HttpClient do
       it "returns health status for all services" do
         result = described_class.health_check_all
 
-        expect(result.keys).to match_array([:users, :doctors, :appointments, :notifications, :payments])
+        expect(result.keys).to match_array([ :users, :doctors, :appointments, :notifications, :payments ])
       end
 
       it "includes status for each service" do

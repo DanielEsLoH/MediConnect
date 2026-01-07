@@ -103,7 +103,7 @@ RSpec.describe ExpiredPendingAppointmentJob do
         # Make the cancellation service fail
         allow_any_instance_of(AppointmentCancellationService).to receive(:call).and_return({
           success: false,
-          errors: ["Cancellation failed"]
+          errors: [ "Cancellation failed" ]
         })
       end
 

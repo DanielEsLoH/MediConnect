@@ -6,7 +6,7 @@ module Api
     # Proxies requests to the payments-service
     class PaymentsController < Api::BaseController
       before_action :authenticate_request!
-      skip_before_action :authenticate_request!, only: [:webhook]
+      skip_before_action :authenticate_request!, only: [ :webhook ]
 
       # GET /api/v1/payments
       # Lists payments for the current user

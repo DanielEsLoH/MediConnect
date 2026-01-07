@@ -121,7 +121,7 @@ RSpec.describe HttpClient do
       end
 
       it "returns nil for non-hash body" do
-        array_response = described_class::Response.new(status: 200, body: ["item"], headers: {})
+        array_response = described_class::Response.new(status: 200, body: [ "item" ], headers: {})
         expect(array_response.dig("key")).to be_nil
       end
 

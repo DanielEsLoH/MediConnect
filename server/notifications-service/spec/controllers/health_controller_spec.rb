@@ -8,7 +8,7 @@ RSpec.describe HealthController, type: :request do
       get "/health"
 
       # Health check may return 200 or 503 depending on dependencies
-      expect([200, 503]).to include(response.status)
+      expect([ 200, 503 ]).to include(response.status)
       json = JSON.parse(response.body)
       expect(json["status"]).to be_present
     end

@@ -435,7 +435,7 @@ RSpec.describe UserLookupService do
   end
 
   describe ".find_many" do
-    let(:user_ids) { [SecureRandom.uuid, SecureRandom.uuid] }
+    let(:user_ids) { [ SecureRandom.uuid, SecureRandom.uuid ] }
     let(:batch_response) do
       instance_double(
         HttpClient::Response,
