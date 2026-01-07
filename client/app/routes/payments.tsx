@@ -354,7 +354,6 @@ export default function PaymentsPage() {
   const handleViewDetails = useCallback((id: number) => {
     // In a full implementation, this would open a modal or navigate to a detail page
     toast.success(`Viewing payment #${id}`);
-    console.log("View payment details:", id);
   }, []);
 
   // Handle payment created (refresh list)
