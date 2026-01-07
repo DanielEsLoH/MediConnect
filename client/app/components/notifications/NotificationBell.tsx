@@ -46,24 +46,19 @@ export function NotificationBell({ className }: NotificationBellProps) {
   } = useNotificationStore();
 
   // Fetch initial notifications and unread count
-  // Note: These queries are disabled until the backend endpoints are implemented
-  // The backend currently returns 404 for /notifications/unread/count
-  // and 500 for /notifications
   const { data: notificationsData } = useQuery({
     queryKey: ["notifications"],
     queryFn: () => notificationsApi.getNotifications(1, 20),
     staleTime: 30000,
-    retry: false, // Don't retry on error (backend may not have this endpoint)
-    enabled: false, // Disabled until backend is ready
+    retry: 1,
   });
 
   const { data: unreadCountData } = useQuery({
     queryKey: ["notifications", "unread-count"],
     queryFn: notificationsApi.getUnreadCount,
     staleTime: 30000,
-    refetchInterval: false, // Disabled until backend is ready
-    retry: false, // Don't retry on error (backend may not have this endpoint)
-    enabled: false, // Disabled until backend is ready
+    refetchInterval: 60000, // Refresh every minute
+    retry: 1,
   });
 
   // Update store when data changes
@@ -148,9 +143,8 @@ export function NotificationBell({ className }: NotificationBellProps) {
   }, []);
 
   // Initialize WebSocket connection for real-time updates
-  // Note: Disabled until backend ActionCable/WebSocket support is implemented
   useWebSocket({
-    enabled: false, // Disabled - backend doesn't have ActionCable configured yet
+    enabled: true,
     onNotification: handleNewNotification,
   });
 

@@ -356,16 +356,14 @@ export default function HomePage() {
   });
 
   // Fetch notifications
-  // Note: Disabled until backend /notifications endpoint is implemented
-  // Currently returns 500 Internal Server Error
   const {
     data: notificationsData,
     isLoading: isLoadingNotifications,
   } = useQuery({
     queryKey: homeKeys.notifications,
     queryFn: () => notificationsApi.getNotifications(1, 5),
-    enabled: false, // Disabled until backend is ready
-    retry: false,
+    enabled: isAuthenticated,
+    retry: 1,
     staleTime: 1000 * 60,
   });
 

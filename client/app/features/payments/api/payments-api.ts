@@ -21,7 +21,7 @@ export const paymentsApi = {
    */
   getPayments: async (): Promise<Payment[]> => {
     const response = await api.get<PaymentsListResponse>("/payments");
-    return response.data.data;
+    return response.data.payments;
   },
 
   /**

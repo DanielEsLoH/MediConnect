@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  # ActionCable WebSocket endpoint
+  mount ActionCable.server => "/cable"
+
   # Health check endpoints
   # Basic health check (Rails built-in)
   get "up" => "rails/health#show", as: :rails_health_check
@@ -83,6 +86,9 @@ Rails.application.routes.draw do
         collection do
           get :methods
           post :methods, action: :add_payment_method
+          post :create_intent
+          post :confirm
+          post :webhook
         end
         member do
           post :refund

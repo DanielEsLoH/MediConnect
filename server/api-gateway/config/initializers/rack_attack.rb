@@ -26,9 +26,15 @@ class Rack::Attack
 
   ### Safelist Rules ###
 
-  # Allow all requests from localhost in development
-  safelist("allow-localhost") do |req|
-    Rails.env.development? && (req.ip == "127.0.0.1" || req.ip == "::1")
+  # Allow all requests in test environment
+  safelist("allow-test") do |_req|
+    Rails.env.test?
+  end
+
+  # Allow all requests in development environment
+  # In development, all requests are trusted (local development)
+  safelist("allow-development") do |_req|
+    Rails.env.development?
   end
 
   # Always allow health check endpoints

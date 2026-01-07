@@ -122,10 +122,21 @@ export interface CreateMockPaymentPayload {
 }
 
 /**
+ * Pagination metadata for list responses.
+ */
+export interface PaginationMeta {
+  current_page: number;
+  per_page: number;
+  total_count: number;
+  total_pages: number;
+}
+
+/**
  * Response from fetching payments list.
  */
 export interface PaymentsListResponse {
-  data: Payment[];
+  payments: Payment[];
+  meta: PaginationMeta;
 }
 
 /**

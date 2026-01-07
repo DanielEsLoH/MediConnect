@@ -68,7 +68,9 @@ export function useWebSocket(config: WebSocketConfig = {}): UseWebSocketReturn {
 
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const connectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectAttemptsRef = useRef(0);
+  const isCleaningUpRef = useRef(false);
   const maxReconnectAttempts = 5;
   const baseReconnectDelay = 1000;
 
@@ -111,6 +113,11 @@ export function useWebSocket(config: WebSocketConfig = {}): UseWebSocketReturn {
    * Connect to WebSocket
    */
   const connect = useCallback(() => {
+    // Don't connect if we're in cleanup phase (React StrictMode)
+    if (isCleaningUpRef.current) {
+      return;
+    }
+
     if (!enabled || !isAuthenticated || !token) {
       return;
     }
@@ -169,18 +176,24 @@ export function useWebSocket(config: WebSocketConfig = {}): UseWebSocketReturn {
       };
 
       wsRef.current.onclose = (event) => {
-        console.log("[WebSocket] Disconnected:", event.code, event.reason);
+        // Suppress logs during React StrictMode cleanup
+        if (!isCleaningUpRef.current) {
+          console.log("[WebSocket] Disconnected:", event.code, event.reason);
+        }
         setConnected(false);
         onDisconnect?.();
 
-        // Attempt to reconnect if not a clean close
-        if (event.code !== 1000 && enabled && isAuthenticated) {
+        // Attempt to reconnect if not a clean close and not cleaning up
+        if (event.code !== 1000 && enabled && isAuthenticated && !isCleaningUpRef.current) {
           scheduleReconnect();
         }
       };
 
       wsRef.current.onerror = (error) => {
-        console.error("[WebSocket] Error:", error);
+        // Suppress error logs during React StrictMode cleanup
+        if (!isCleaningUpRef.current) {
+          console.error("[WebSocket] Error:", error);
+        }
         onError?.(error);
       };
     } catch (error) {
@@ -224,15 +237,37 @@ export function useWebSocket(config: WebSocketConfig = {}): UseWebSocketReturn {
   /**
    * Disconnect from WebSocket
    */
-  const disconnect = useCallback(() => {
+  const disconnect = useCallback((isCleanup = false) => {
+    // Set cleanup flag to suppress error logs during React StrictMode remount
+    if (isCleanup) {
+      isCleaningUpRef.current = true;
+    }
+
+    if (connectTimeoutRef.current) {
+      clearTimeout(connectTimeoutRef.current);
+      connectTimeoutRef.current = null;
+    }
+
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
       reconnectTimeoutRef.current = null;
     }
 
     if (wsRef.current) {
-      wsRef.current.close(1000, "Client disconnecting");
+      const ws = wsRef.current;
       wsRef.current = null;
+
+      // Remove event handlers to prevent callbacks during cleanup
+      ws.onopen = null;
+      ws.onclose = null;
+      ws.onerror = null;
+      ws.onmessage = null;
+
+      // Only call close() if the WebSocket is already OPEN
+      // Calling close() on CONNECTING state triggers browser console errors
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.close(1000, "Client disconnecting");
+      }
     }
 
     setConnected(false);
@@ -249,18 +284,27 @@ export function useWebSocket(config: WebSocketConfig = {}): UseWebSocketReturn {
 
   // Connect on mount, disconnect on unmount
   useEffect(() => {
+    // Reset cleanup flag on mount
+    isCleaningUpRef.current = false;
+
     if (enabled && isAuthenticated) {
-      connect();
+      // Delay connection slightly to handle React StrictMode double-invoke
+      connectTimeoutRef.current = setTimeout(() => {
+        connect();
+      }, 50);
     }
 
     return () => {
-      disconnect();
+      // Pass true to indicate this is a cleanup (suppresses error logs)
+      disconnect(true);
     };
   }, [enabled, isAuthenticated, connect, disconnect]);
 
   // Reconnect when token changes
   useEffect(() => {
     if (token && enabled && isAuthenticated) {
+      // Reset cleanup flag when token changes
+      isCleaningUpRef.current = false;
       reconnect();
     }
   }, [token]);
@@ -268,6 +312,6 @@ export function useWebSocket(config: WebSocketConfig = {}): UseWebSocketReturn {
   return {
     isConnected,
     reconnect,
-    disconnect,
+    disconnect: () => disconnect(false),
   };
 }
